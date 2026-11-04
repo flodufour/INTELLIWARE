@@ -46,14 +46,15 @@ Rules:
 2. Create a branch: `git checkout -b feature/my-task`
 3. Commit often, in small clean commits.
 4. Push: `git push -u origin feature/my-task`
-5. Open a Pull Request to `main`.
+5. Open a Pull Request to `main`, with `Closes #N` in the description.
 6. At least **one approved review from a code owner** (`.github/CODEOWNERS`). The repository admin can merge without it.
-7. Merge with **squash and merge**, then delete the branch.
+7. Merge with **squash and merge** (the only method enabled). The branch is deleted automatically.
 
 ## Pull Requests
 
 - Title uses the commit format (`feat: ...`).
 - Description: what changes, why, and how to test.
+- Link the issue with `Closes #N`: on merge, the issue closes and the board moves it to Done.
 - Keep PRs small and focused: one PR = one task.
 - Rebase on `main` if the branch is behind: `git pull --rebase origin main`
 
@@ -64,3 +65,7 @@ Rules:
 - Personal IDE or OS files: `.vscode/`, `.idea/`, `.DS_Store`
 
 List them in `.gitignore`.
+
+## Third-party files
+
+The repository is under the MIT license. Files we did not write (datasets, manuals, CAD) keep their original license: store them in their own folder with their source and LICENSE file.
