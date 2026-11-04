@@ -1,6 +1,6 @@
 # INTELLIWARE - Genesis
 
-Founding document of the project: who we are, what we build, and why.
+Founding document of the project: who we are, what we build, and why. Superseded on scope and technologies by [scope.md](scope.md); schedule in [roadmap.md](roadmap.md).
 
 ## Team
 
