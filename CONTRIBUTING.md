@@ -2,7 +2,7 @@
 
 ## Branches
 
-- `main`: always stable. **No direct commits.**
+- `main`: always stable. **No direct commits**, except by the repository admin.
 - One branch per task, created from `main`:
 
 | Prefix      | Use                       | Example               |
@@ -47,7 +47,7 @@ Rules:
 3. Commit often, in small clean commits.
 4. Push: `git push -u origin feature/my-task`
 5. Open a Pull Request to `main`.
-6. At least **one approved review** before merging.
+6. At least **one approved review from a code owner** (`.github/CODEOWNERS`). The repository admin can merge without it.
 7. Merge with **squash and merge**, then delete the branch.
 
 ## Pull Requests
