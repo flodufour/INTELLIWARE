@@ -26,7 +26,7 @@ An **open-source underwater vehicle**. Candidate: **OpenROV** (public BOM, elect
 
 **Retrieve.** "I need a spare thruster propeller." The agent finds its slot in the twin and the replacement procedure in the knowledge base. The technician confirms. The robot picks the part and places it on the tray.
 
-**Replenish.** When a part falls below its stock threshold, the twin creates a simulated purchase order with a supplier and an expected delivery date. The agent can answer "when will it arrive?". On delivery, the part goes through the Store scenario.
+**Replenish.** When a part falls below its stock threshold, the simulator creates a purchase order in the twin with a supplier and an expected delivery date. The agent can answer "when will it arrive?". On delivery, the part goes through the Store scenario.
 
 **Inventory.** After each task and on request, the fixed camera scans the shelf. The result is compared with the twin. Any mismatch (part moved or removed by hand) is flagged and corrected.
 
@@ -58,6 +58,7 @@ Every physical action requires human confirmation and is traced in the twin.
 | Digital twin | Live state of shelf, slots, parts, robot, simulated sensors, purchase orders and task history | FIWARE Orion-LD (NGSI-LD) |
 | Knowledge base | BOM as a graph, manuals, procedures and applicable standards as searchable chunks | Neo4j (graph + vector index), multilingual embedding model |
 | MCP servers | Expose twin, knowledge base and robot to the agent as tools | Python MCP SDK, built by us |
+| Simulator | Feeds the twin with simulated sensor values, purchase orders and supplier deliveries | Python, NGSI-LD API |
 | Robot control | Leader-follower teleoperation, recording, execution of store and retrieve gestures | PIPER arm, ROS 2, LeRobot, SmolVLA |
 | Vision | Identifies parts, checks grasp success, scans the shelf | Open-vocabulary detector (YOLO-World) |
 | Infrastructure | Run everything the same way on every machine | Docker Compose, GitHub Actions |
@@ -83,6 +84,7 @@ Every block is decoupled: it can be developed, run and tested alone.
 | Agent | Mock MCP tools, scripted scenarios in French and English |
 | Knowledge base | RAG test question set, scored automatically |
 | Digital twin | Data model tests on Orion-LD: create, update, query, subscriptions |
+| Simulator | Scripted runs on a test twin: values in range, orders created below threshold |
 | MCP servers | Tool calls against a test twin and test knowledge base |
 | Vision | Labeled image set of the shelf: presence, identification, grasp state |
 | Robot | Bench trials on fixed commands, without agent or twin |
@@ -133,7 +135,7 @@ The application domain change must be approved by the supervisors.
 
 | Member | Workstream |
 |--------|------------|
-| Florian (lead) | Digital twin (FIWARE data model), robot integration, overall integration |
+| Florian (lead) | Digital twin (FIWARE data model), simulator, robot integration, overall integration |
 | Adrien | Knowledge base, MCP servers for twin and knowledge base, infrastructure and CI |
 | Antoine | Reference product dataset and shelf layout, safety and confirmation rules, test protocols and metrics |
 | Louis-Marie | Agent, robot MCP server, VLA training |
@@ -143,7 +145,7 @@ The application domain change must be approved by the supervisors.
 | Period | Milestone | Done when |
 |--------|-----------|-----------|
 | M1-M2 | Foundations | Interface contracts and mocks agreed, product data sourced, shelf built, PIPER teleoperated under ROS 2, twin data model in Orion-LD, BOM in Neo4j |
-| M3 | Walking skeleton | Chat to agent to twin + knowledge base + scripted robot move, end to end |
+| M3 | Walking skeleton | Chat to agent to twin + knowledge base + scripted robot move, end to end; simulator feeds the twin |
 | M4-M5 | Data | Demonstrations recorded for each slot (including drops), detector tuned on our parts, RAG test question set |
 | M6-M7 | Intelligence | SmolVLA trained, inventory scan updates the twin, confirmation flow in place |
 | M8-M9 | Integration | All scenarios end to end, Jetson deployment, robustness tests, local LLM trial |
