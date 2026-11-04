@@ -16,7 +16,7 @@ An **open-source underwater vehicle**. Candidate: **OpenROV** (public BOM, elect
 
 ## Physical setup
 
-- One small shelf (2 to 3 levels, 6 to 9 slots) within reach of the PIPER arm.
+- One small shelf (2 levels, 4 to 6 slots, 3 to 4 part types) within reach of the PIPER arm. Sized for the March 1, 2027 deadline.
 - One input/output tray where parts are dropped off and handed over.
 - A fixed RGB-D camera facing the shelf (inventory) and a wrist camera (grasping).
 
@@ -43,7 +43,7 @@ Every physical action requires human confirmation and is traced in the twin.
 | One shelf, one robot, one tray | Multiple shelves or robots | Second shelf |
 | Mini digital twin: shelf, slots, parts, robot, tasks | Real employer or military data | 3D view of the twin |
 | Simulated sensors in the twin (shelf temperature, humidity, slot weight) | Physical IoT sensors | Real weight sensors on slots |
-| Store, retrieve, inventory scan | Autonomous action without validation | Voice interface |
+| Store, retrieve, inventory scan | Autonomous action without validation | Voice interface, Jetson deployment |
 | Simulated supply chain: stock thresholds, purchase orders, supplier lead times | Real ERP or supplier integration | |
 | Vision-based grasp with drop and missing-part handling | | Local LLM in production |
 | Text chat with live shelf view | | |
@@ -73,7 +73,7 @@ Every block is decoupled: it can be developed, run and tested alone.
   - MCP tools between the agent and the twin, knowledge base and robot.
   - NGSI-LD entities for everything stored in the twin.
   - A robot command format between the robot MCP server and the robot controller.
-- **Contracts first.** All three are written and agreed in M1. Any change goes through a PR reviewed by the owners of both sides.
+- **Contracts first.** All three are written and agreed in sprint 0 (by Nov 13, 2026). Any change goes through a PR reviewed by the owners of both sides.
 - **One service per block.** Each block is its own Docker Compose service, startable without the others.
 - **Mocks for neighbors.** Each contract comes with a mock, so a block can be tested without the real blocks around it.
 - **Agent knows tools, not implementations.** Replacing a mock by the real block requires no change in the agent.
@@ -89,7 +89,7 @@ Every block is decoupled: it can be developed, run and tested alone.
 | Vision | Labeled image set of the shelf: presence, identification, grasp state |
 | Robot | Bench trials on fixed commands, without agent or twin |
 
-On top of block tests, end-to-end tests run the reference scenarios on the full chain, from the walking skeleton (M3) onward.
+On top of block tests, end-to-end tests run the reference scenarios on the full chain, from the walking skeleton (Dec 11, 2026) onward.
 
 ## Technology choices
 
@@ -105,7 +105,7 @@ On top of block tests, end-to-end tests run the reference scenarios on the full 
 
 - **Training**: one run on one GPU, at least 12 GB VRAM. Splitting one training across PCs over a home or school network is slower than a single GPU.
 - **Team GPUs in parallel**: each member's GPU runs a different experiment (SmolVLA vs ACT, hyperparameters, dataset variants).
-- **Inference**: target is an embedded NVIDIA Jetson next to the robot. Fallback: a laptop GPU.
+- **Inference**: laptop GPU next to the robot. Embedded NVIDIA Jetson is a stretch goal given the deadline.
 - **Known hardware**: Florian's laptop, RTX 3050 Laptop (4 GB). Enough for detector inference and probably SmolVLA inference, too small for training.
 - **Fallback**: school GPUs or rented cloud GPU.
 
@@ -113,10 +113,10 @@ On top of block tests, end-to-end tests run the reference scenarios on the full 
 
 | Requirement | How we meet it |
 |-------------|----------------|
-| P7 - PIPER master-slave teleoperation with synchronized RGB-D feedback | ROS 2 leader-follower teleoperation and recording, M1-M2 |
-| P7 - Imitation dataset: trajectories, video, text instructions | Store and retrieve demonstrations, M4-M5 |
+| P7 - PIPER master-slave teleoperation with synchronized RGB-D feedback | ROS 2 leader-follower teleoperation and recording, sprint 1 |
+| P7 - Imitation dataset: trajectories, video, text instructions | Store and retrieve demonstrations, sprints 3-4 |
 | P7 - VLA fine-tuning (OpenVLA or similar) via LoRA/Q-LoRA | SmolVLA fine-tuned with LoRA |
-| P7 - Deployment on embedded compute (Jetson type) | Jetson target, laptop fallback |
+| P7 - Deployment on embedded compute (Jetson type) | **Partial**: laptop GPU, Jetson as stretch goal (deadline) |
 | P7 - Real-time inference, robustness to lighting and target displacement | Robustness criteria below |
 | P7 - Physical demo on voice or text command with success rate | Text command, voice as stretch goal; success criteria below |
 | P7 - Construction finishing work (application domain) | **Changed**: warehouse handling. Same skills (VLA, imitation learning, ROS 2) |
@@ -129,27 +129,31 @@ On top of block tests, end-to-end tests run the reference scenarios on the full 
 | P10 - Multilingual documentation | English public docs + French procedures; questions and answers in both languages |
 | P10 - Naval context | Underwater vehicle as reference product |
 
-The application domain change must be approved by the supervisors.
+The application domain change and the Jetson stretch goal must be approved by the supervisors.
 
 ## Team workstreams
 
 | Member | Workstream |
 |--------|------------|
-| Florian (lead) | Digital twin (FIWARE data model), simulator, robot integration, overall integration |
+| Florian (lead) | Digital twin (FIWARE data model), simulator, robot hardware and ROS 2, overall integration |
 | Adrien | Knowledge base, MCP servers for twin and knowledge base, infrastructure and CI |
-| Antoine | Reference product dataset and shelf layout, safety and confirmation rules, test protocols and metrics |
-| Louis-Marie | Agent, robot MCP server, VLA training |
+| Antoine | Reference product dataset and shelf, vision, safety and confirmation rules, test protocols and metrics |
+| Louis-Marie | Agent, interface, robot MCP server, VLA training |
+
+Everyone takes part in recording robot demonstrations.
 
 ## Milestones
 
-| Period | Milestone | Done when |
-|--------|-----------|-----------|
-| M1-M2 | Foundations | Interface contracts and mocks agreed, product data sourced, shelf built, PIPER teleoperated under ROS 2, twin data model in Orion-LD, BOM in Neo4j |
-| M3 | Walking skeleton | Chat to agent to twin + knowledge base + scripted robot move, end to end; simulator feeds the twin |
-| M4-M5 | Data | Demonstrations recorded for each slot (including drops), detector tuned on our parts, RAG test question set |
-| M6-M7 | Intelligence | SmolVLA trained, inventory scan updates the twin, confirmation flow in place |
-| M8-M9 | Integration | All scenarios end to end, Jetson deployment, robustness tests, local LLM trial |
-| M10 | Validation | Validation report, final defense |
+Deadline: **March 1, 2027**. Sprint-level detail in [roadmap.md](roadmap.md).
+
+| Date | Milestone | Done when |
+|------|-----------|-----------|
+| Nov 13, 2026 | Kickoff | Scope approved by supervisors, contracts and mocks agreed, hardware confirmed |
+| Dec 11, 2026 | Walking skeleton | Chat to agent to twin + knowledge base + scripted robot move, end to end; simulator feeds the twin |
+| Jan 15, 2027 | Data and first model | Demonstrations recorded, SmolVLA trained, vision detects presence and grasp state |
+| Jan 29, 2027 | VLA go/no-go | VLA kept, or replaced by ACT or detector-guided scripted grasp |
+| Feb 12, 2027 | Feature freeze | All scenarios end to end, robustness tests done |
+| Mar 1, 2027 | Delivery | Validation report, demo, final defense |
 
 ## Success criteria
 
@@ -168,12 +172,13 @@ Targets to be confirmed after the first tests.
 
 | Risk | Mitigation |
 |------|------------|
-| Public data of the reference product incomplete | Check OpenROV files in M1; complete the BOM ourselves or switch to the fallback |
-| Shelf slots hard to reach for the arm | Design the shelf around the PIPER workspace in M1, open-top bins |
-| PIPER not supported by LeRobot out of the box | Check in M1; write a LeRobot adapter on top of the ROS 2 driver |
-| Not enough VRAM for VLA training | Identify a 12 GB+ GPU in M1; school or cloud as fallback |
+| Four months is short for a robot learning project | Small shelf, few part types, VLA go/no-go on Jan 29 with a fallback ready |
+| Public data of the reference product incomplete | Check OpenROV files in sprint 0; complete the BOM ourselves or switch to the fallback |
+| Shelf slots hard to reach for the arm | Design the shelf around the PIPER workspace in sprint 0, open-top bins |
+| PIPER not supported by LeRobot out of the box | Check in sprint 0; write a LeRobot adapter on top of the ROS 2 driver |
+| Not enough VRAM for VLA training | Identify a 12 GB+ GPU in sprint 0; school or cloud as fallback |
 | VLA success rate too low | Fall back to ACT, or to scripted grasp guided by the detector |
-| Late integration | Contracts in M1, walking skeleton at M3, end-to-end tests from then on |
+| Late integration | Contracts in sprint 0, walking skeleton on Dec 11, end-to-end tests from then on |
 | Blocks pass alone but fail together | Contracts reviewed by both sides, mocks kept in sync with real blocks |
 
 ## Open questions
