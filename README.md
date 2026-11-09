@@ -1,11 +1,12 @@
 # INTELLIWARE
-INTELLIWARE is a student project focused on developing an autonomous smart logistics warehouse powered by artificial intelligence, automation, and intelligent data management.
+A one-shelf smart warehouse for an underwater vehicle: a PIPER arm stores and retrieves spare parts, a digital twin knows what is where, and an AI agent answers technicians in French or English. ESILV A4 project, 2026-27.
 
 ## Documents
 
 - [Genesis](project_definition/genesis.md): team, origin, vision
 - [Scope](project_definition/scope.md): what we build and with which technologies
 - [Roadmap](project_definition/roadmap.md): sprints, dates, way of working
+- [Architecture](project_definition/architecture.html): one-page view of the blocks ([online](https://claude.ai/artifact/NJPMhxsZyBUMdeQQLUSEfY))
 - [Contributing](CONTRIBUTING.md): git conventions
 
 ## Tracking
