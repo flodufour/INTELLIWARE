@@ -1,190 +1,174 @@
 # INTELLIWARE - Project Scope
 
-What the project does, what it does not do, and which technologies we use. Builds on [genesis.md](genesis.md); where they differ, this document wins.
+What we build and with which technologies. Source of truth: where [genesis.md](genesis.md) differs, this document wins. Schedule in [roadmap.md](roadmap.md).
 
 ## Goal
 
-A smart spare parts warehouse for a naval product, reduced to **one shelf**. A robot arm stores and retrieves parts. A mini digital twin knows at all times what is where. An AI agent lets a technician talk to the warehouse in natural language and links each part to its technical documentation.
+A smart spare parts warehouse for an underwater vehicle, reduced to **one shelf**. A robot arm stores and retrieves parts, a digital twin knows at all times what is where, and an AI agent answers technicians in French or English, linking each part to its documentation.
 
 ## Reference product
 
-An **open-source underwater vehicle**. Candidate: **OpenROV** (public BOM, electronics and mechanical files). Fallback: an open-source 3D-printed RC submarine.
+**OpenROV**, an open-source underwater vehicle (fallback: an open-source 3D-printed RC submarine).
 
-- Real military submarine data is classified and out of the question.
-- From the public files we take the BOM and the documentation (English). Maintenance procedures are written by us in French, and stock levels are created by us. The knowledge base is mixed-language by design.
-- Small parts of the vehicle (3D printed or laser cut) are the physical spare parts the robot handles.
+- Its public BOM and documentation (English) feed the knowledge base. We write the maintenance procedures (French) and the stock levels.
+- Small 3D-printed or laser-cut parts of the vehicle are the physical spare parts.
 
 ## Physical setup
 
-- One small shelf (2 levels, 4 to 6 slots, 3 to 4 part types) within reach of the PIPER arm. Sized for the March 1, 2027 deadline.
-- One input/output tray where parts are dropped off and handed over.
-- A fixed RGB-D camera facing the shelf (inventory) and a wrist camera (grasping).
+- One shelf: 2 levels, 4 to 6 slots, 3 to 4 part types, within reach of the PIPER arm.
+- One input/output tray.
+- A fixed RGB-D camera facing the shelf and a wrist camera on the gripper.
 
 ## Scenarios
 
-**Store.** A technician puts a part on the tray and says "store this". The robot identifies it with the camera, the twin assigns a free slot, the robot stores it, the twin is updated.
+| Scenario | What happens |
+|----------|--------------|
+| Diagnose | "The thruster vibrates, what should I check?" The knowledge base gives the procedure and the parts involved (BOM graph), the twin gives their stock. The agent can chain to Retrieve. No robot move. |
+| Store | A part is put on the tray. Vision identifies it, the twin assigns a free slot, the robot stores it. |
+| Retrieve | "I need a spare thruster propeller." The agent gives the location and the replacement procedure. After confirmation, the robot brings the part to the tray. |
+| Replenish | Below its stock threshold, a part gets a purchase order with supplier and delivery date. On delivery, it goes through Store. |
+| Inventory | After each task and on request, the fixed camera scans the shelf. Mismatches with the twin are flagged and corrected. |
+| Monitor | A simulated sensor crosses its threshold (e.g. shelf humidity). The knowledge base gives the storage conditions of the parts at risk, the agent alerts the technician, the alert is traced in the twin. |
+| Failures | Dropped part: detected and retried. Missing part: the robot stops, the twin is corrected, the technician is informed. |
 
-**Retrieve.** "I need a spare thruster propeller." The agent finds its slot in the twin and the replacement procedure in the knowledge base. The technician confirms. The robot picks the part and places it on the tray.
-
-**Replenish.** When a part falls below its stock threshold, the simulator creates a purchase order in the twin with a supplier and an expected delivery date. The agent can answer "when will it arrive?". On delivery, the part goes through the Store scenario.
-
-**Inventory.** After each task and on request, the fixed camera scans the shelf. The result is compared with the twin. Any mismatch (part moved or removed by hand) is flagged and corrected.
-
-**Failures.**
-- Part dropped: detected by vision, the robot retries.
-- Part not in its slot: the robot stops, the twin is corrected, the agent informs the technician.
-
-Every physical action requires human confirmation and is traced in the twin.
+Every physical action is confirmed by a human and traced in the twin.
 
 ## Scope
 
 | In scope | Out of scope | Stretch goals |
 |----------|--------------|---------------|
-| One shelf, one robot, one tray | Multiple shelves or robots | Second shelf |
-| Mini digital twin: shelf, slots, parts, robot, tasks | Real employer or military data | 3D view of the twin |
-| Simulated sensors in the twin (shelf temperature, humidity, slot weight) | Physical IoT sensors | Real weight sensors on slots |
-| Store, retrieve, inventory scan | Autonomous action without validation | Voice interface, Jetson deployment |
-| Simulated supply chain: stock thresholds, purchase orders, supplier lead times | Real ERP or supplier integration | |
-| Vision-based grasp with drop and missing-part handling | | Local LLM in production |
-| Text chat with live shelf view | | |
-| Bilingual French / English: questions, answers, interface and documentation | Other languages | |
+| One shelf, one robot, one tray | Several shelves or robots | Second shelf |
+| Digital twin with simulated sensors (temperature, humidity) | Physical IoT sensors | Slot weight sensors, 3D view |
+| Simulated supply chain: thresholds, purchase orders, lead times | ERP or supplier integration | |
+| Text chat in French and English | Other languages | Voice interface |
+| Hosted LLM (Claude API) | | Local LLM |
+| Inference on a laptop GPU | | Jetson deployment |
 
 ## Building blocks
 
-| Block | What it does | Technologies |
-|-------|--------------|--------------|
-| Interface | Chat with the agent, action confirmation, live view of the shelf, in French or English | Streamlit |
-| Agent | Understands requests, calls tools, asks for confirmation, answers in the user's language | Python, Pydantic AI, Claude API (local model via Ollama later) |
-| Digital twin | Live state of shelf, slots, parts, robot, simulated sensors, purchase orders and task history | FIWARE Orion-LD (NGSI-LD) |
-| Knowledge base | BOM as a graph, manuals, procedures and applicable standards as searchable chunks | Neo4j (graph + vector index), multilingual embedding model |
-| MCP servers | Expose twin, knowledge base and robot to the agent as tools | Python MCP SDK, built by us |
-| Simulator | Feeds the twin with simulated sensor values, purchase orders and supplier deliveries | Python, NGSI-LD API |
-| Robot control | Leader-follower teleoperation, recording, execution of store and retrieve gestures | PIPER arm, ROS 2, LeRobot, SmolVLA |
-| Vision | Identifies parts, checks grasp success, scans the shelf | Open-vocabulary detector (YOLO-World) |
-| Infrastructure | Run everything the same way on every machine | Docker Compose, GitHub Actions |
+| Block | Role | Technologies |
+|-------|------|--------------|
+| Interface | Chat, action confirmation, live shelf view | Streamlit |
+| Agent | Understands requests, calls tools, asks for confirmation, answers in the user's language | Pydantic AI, Claude API (Ollama later) |
+| Digital twin | Live state of shelf, slots, parts, robot, sensors, purchase orders, task history | FIWARE Orion-LD (NGSI-LD), MongoDB |
+| Knowledge base | BOM as a graph, manuals, procedures and standards as searchable chunks | Neo4j (graph + vector index), multilingual embeddings |
+| MCP servers | Expose twin, knowledge base and robot to the agent as tools | Python MCP SDK |
+| Simulator | Sensor values, purchase orders, deliveries | Python, NGSI-LD API |
+| Robot | Leader-follower teleoperation, recording, store and retrieve gestures | PIPER arm, ROS 2, LeRobot, SmolVLA |
+| Vision | Identifies parts, checks grasp success, scans the shelf | YOLO-World |
+| Infrastructure | Same setup on every machine, automated tests | Docker Compose, GitHub Actions |
 
-Common language: Python.
+All code in Python.
 
 ## Architecture principles
 
-Every block is decoupled: it can be developed, run and tested alone.
+Every block can be developed, run and tested alone.
 
-- **Defined interfaces only.** Blocks talk through three contracts:
-  - MCP tools between the agent and the twin, knowledge base and robot.
-  - NGSI-LD entities for everything stored in the twin.
-  - A robot command format between the robot MCP server and the robot controller.
-- **Contracts first.** All three are written and agreed in sprint 0 (by Nov 13, 2026). Any change goes through a PR reviewed by the owners of both sides.
-- **One service per block.** Each block is its own Docker Compose service, startable without the others.
-- **Mocks for neighbors.** Each contract comes with a mock, so a block can be tested without the real blocks around it.
-- **Agent knows tools, not implementations.** Replacing a mock by the real block requires no change in the agent.
+- **Three contracts**, agreed in sprint 0, changed only through a PR reviewed by both sides:
+  - MCP tools: agent to twin, knowledge base and robot.
+  - NGSI-LD entities: everything stored in the twin.
+  - Robot command format: robot MCP server to robot controller.
+- **One Docker Compose service per block**, with a mock of its contract so neighbors can work without it.
+- **The agent knows tools, not implementations**: swapping a mock for the real block changes nothing in the agent.
 
 | Block | Tested alone with |
 |-------|-------------------|
-| Interface | Mock agent returning scripted answers |
+| Interface | Mock agent with scripted answers |
 | Agent | Mock MCP tools, scripted scenarios in French and English |
-| Knowledge base | RAG test question set, scored automatically |
-| Digital twin | Data model tests on Orion-LD: create, update, query, subscriptions |
-| Simulator | Scripted runs on a test twin: values in range, orders created below threshold |
-| MCP servers | Tool calls against a test twin and test knowledge base |
-| Vision | Labeled image set of the shelf: presence, identification, grasp state |
-| Robot | Bench trials on fixed commands, without agent or twin |
+| Knowledge base | RAG question set, scored automatically |
+| Digital twin | Create, update, query and subscription tests on Orion-LD |
+| Simulator | Scripted runs on a test twin |
+| MCP servers | Tool calls on a test twin and test knowledge base |
+| Vision | Labeled images of the shelf |
+| Robot | Bench trials on fixed commands |
 
-On top of block tests, end-to-end tests run the reference scenarios on the full chain, from the walking skeleton (Dec 11, 2026) onward.
+End-to-end tests run the scenarios on the full chain from the walking skeleton (Dec 11, 2026) onward.
 
 ## Technology choices
 
-- **FIWARE as the single source of truth for "what is where"**: updated by every robot action and every inventory scan. Everything else reads from it.
-- **Claude API first, local later**: reliable tool use from day one. Pydantic AI makes switching to a local model a configuration change.
-- **Neo4j for hybrid RAG**: graph traversal for the BOM and vector search for documents in one database. Same hybrid RAG as a separate vector store, with less infrastructure.
-- **ROS 2 for the robot**: official PIPER driver, teleoperation and recording. LeRobot handles training.
-- **SmolVLA instead of OpenVLA**: fast enough for real time on embedded compute. Fine-tuned with LoRA, as in proposal 7, to fit on one consumer GPU. Fallback: ACT policy (LeRobot).
-- **Agent normalizes robot instructions**: whatever the user's language, the agent sends the VLA a short English instruction from a fixed format ("pick the propeller from slot B2"). VLA models are trained mostly on English, and a fixed format makes the dataset consistent.
-- **Vision separate from the VLA**: a VLA does not report failure. The detector tells us whether a part is there, in the gripper, or on the floor.
+- **The twin is the single source of truth** for what is where, updated by every robot action and every scan.
+- **SmolVLA rather than OpenVLA**: small enough to fine-tune with LoRA on one GPU and to run on a laptop GPU. Fallbacks: ACT, then a detector-guided scripted grasp.
+- **Vision separate from the VLA**: a VLA does not report failure; the detector says whether a part is in its slot, in the gripper or dropped.
+- **Fixed-format robot instructions**: the agent turns any request, French or English, into one English instruction ("pick the propeller from slot B2"). Consistent dataset, same action in both languages.
+- **Neo4j for hybrid RAG**: graph and vector search in one database.
+- **Claude API first**: reliable tool use from day one; Pydantic AI makes a local model a configuration change.
 
 ## Compute
 
-- **Training**: one run on one GPU, at least 12 GB VRAM. Splitting one training across PCs over a home or school network is slower than a single GPU.
-- **Team GPUs in parallel**: each member's GPU runs a different experiment (SmolVLA vs ACT, hyperparameters, dataset variants).
-- **Inference**: laptop GPU next to the robot. Embedded NVIDIA Jetson is a stretch goal given the deadline.
-- **Known hardware**: Florian's laptop, RTX 3050 Laptop (4 GB). Enough for detector inference and probably SmolVLA inference, too small for training.
-- **Fallback**: school GPUs or rented cloud GPU.
+- **Training**: one GPU with at least 12 GB VRAM (team, school or cloud). Team GPUs run separate experiments in parallel; one training split across PCs would be slower.
+- **Inference**: laptop GPU next to the robot (Florian: RTX 3050 Laptop, 4 GB, enough for the detector and probably SmolVLA).
 
 ## Compliance with proposals 7 and 10
 
 | Requirement | How we meet it |
 |-------------|----------------|
-| P7 - PIPER master-slave teleoperation with synchronized RGB-D feedback | ROS 2 leader-follower teleoperation and recording, sprint 1 |
-| P7 - Imitation dataset: trajectories, video, text instructions | Store and retrieve demonstrations, sprints 3-4 |
-| P7 - VLA fine-tuning (OpenVLA or similar) via LoRA/Q-LoRA | SmolVLA fine-tuned with LoRA |
-| P7 - Deployment on embedded compute (Jetson type) | **Partial**: laptop GPU, Jetson as stretch goal (deadline) |
-| P7 - Real-time inference, robustness to lighting and target displacement | Robustness criteria below |
-| P7 - Physical demo on voice or text command with success rate | Text command, voice as stretch goal; success criteria below |
-| P7 - Construction finishing work (application domain) | **Changed**: warehouse handling. Same skills (VLA, imitation learning, ROS 2) |
-| P10 - Hybrid RAG with graph and vector search | Neo4j graph + vector index |
-| P10 - Orion Context Broker simulating inventory and sensors | Real inventory by vision + simulated sensors |
-| P10 - MCP server for the agent to query FIWARE | Built by us |
-| P10 - Chat or voice interface for technical and logistic queries | Text chat: procedure + part location + supply status in one answer |
-| P10 - Real-time supply chain status | Simulated purchase orders and supplier lead times in the twin |
-| P10 - Maintenance manuals and standards | Both indexed in the knowledge base |
-| P10 - Multilingual documentation | English public docs + French procedures; questions and answers in both languages |
-| P10 - Naval context | Underwater vehicle as reference product |
+| P7 - Master-slave teleoperation with RGB-D feedback | ROS 2 leader-follower teleoperation and recording |
+| P7 - Imitation dataset: trajectories, video, instructions | Store and retrieve demonstrations |
+| P7 - VLA fine-tuning via LoRA | SmolVLA with LoRA |
+| P7 - Embedded deployment (Jetson type) | **Partial**: laptop GPU, Jetson as stretch goal |
+| P7 - Robustness to lighting and target displacement | Success criteria below |
+| P7 - Physical demo on command, with success rate | Text command, success criteria below |
+| P7 - Construction finishing (application domain) | **Changed**: warehouse handling, same skills |
+| P10 - Hybrid RAG, graph and vector | Neo4j |
+| P10 - Context Broker with inventory and sensors | Orion-LD: inventory by vision, simulated sensors |
+| P10 - MCP server to query FIWARE | Built by us |
+| P10 - Chat for technical and logistic queries | Procedure, location and supply status in one answer |
+| P10 - Real-time supply chain status | Simulated purchase orders and lead times |
+| P10 - Multilingual manuals and standards | English documentation, French procedures, both languages in chat |
+| P10 - Naval context | Underwater vehicle |
 
-The application domain change and the Jetson stretch goal must be approved by the supervisors.
+The two deviations (Jetson, domain) need supervisor approval.
 
 ## Team workstreams
 
 | Member | Workstream |
 |--------|------------|
-| Florian (lead) | Digital twin (FIWARE data model), simulator, robot hardware and ROS 2, overall integration |
-| Adrien | Knowledge base, MCP servers for twin and knowledge base, infrastructure and CI |
-| Antoine | Reference product dataset and shelf, vision, safety and confirmation rules, test protocols and metrics |
+| Florian (lead) | Digital twin, simulator, robot hardware and ROS 2, repository structure, integration |
+| Adrien | Knowledge base, twin and knowledge base MCP servers, CI |
+| Antoine | Reference product data, shelf, vision, safety rules, tests and metrics |
 | Louis-Marie | Agent, interface, robot MCP server, VLA training |
 
-Everyone takes part in recording robot demonstrations.
+Everyone records robot demonstrations.
 
 ## Milestones
 
-Deadline: **March 1, 2027**. Sprint-level detail in [roadmap.md](roadmap.md).
+Deadline: **March 1, 2027**. Sprints in [roadmap.md](roadmap.md).
 
 | Date | Milestone | Done when |
 |------|-----------|-----------|
-| Nov 13, 2026 | Kickoff | Scope approved by supervisors, contracts and mocks agreed, hardware confirmed |
-| Dec 11, 2026 | Walking skeleton | Chat to agent to twin + knowledge base + scripted robot move, end to end; simulator feeds the twin |
-| Jan 15, 2027 | Data and first model | Demonstrations recorded, SmolVLA trained, vision detects presence and grasp state |
-| Jan 29, 2027 | VLA go/no-go | VLA kept, or replaced by ACT or detector-guided scripted grasp |
+| Nov 13, 2026 | Kickoff | Scope approved, contracts and mocks agreed, hardware confirmed |
+| Dec 11, 2026 | Walking skeleton | Chat to agent to twin, knowledge base and scripted robot move; simulator feeds the twin |
+| Jan 15, 2027 | First model | Demonstrations recorded, SmolVLA trained, vision detects presence and grasp state |
+| Jan 29, 2027 | VLA go/no-go | VLA kept, or replaced by a fallback |
 | Feb 12, 2027 | Feature freeze | All scenarios end to end, robustness tests done |
-| Mar 1, 2027 | Delivery | Validation report, demo, final defense |
+| Mar 1, 2027 | Delivery | Validation report, demo, defense |
 
 ## Success criteria
 
-Targets to be confirmed after the first tests.
+Targets confirmed after the first tests.
 
-- Store and retrieve success rate of at least 80% over 20 trials each.
-- Success rate maintained under lighting changes and with parts shifted in their slot.
-- Twin matches the physical shelf after every task and every scan.
-- Manual changes to the shelf detected at the next scan.
-- Missing part always detected and reported, never a silent failure.
-- Correct answers on at least 85% of the RAG test question set, in French and in English.
-- Robot requests in French or English lead to the same robot action.
-- 100% of physical actions confirmed by a human and traced in the twin.
+- Store and retrieve: at least 80% success over 20 trials each, kept under lighting changes and shifted parts.
+- The twin matches the shelf after every task and scan; manual changes caught at the next scan.
+- A missing part is always reported.
+- Every sensor threshold crossing raises an alert.
+- RAG: at least 85% correct answers on the question set, in French and in English.
+- The same request in French or English gives the same robot action.
+- 100% of physical actions confirmed and traced.
 
 ## Main risks
 
 | Risk | Mitigation |
 |------|------------|
-| Four months is short for a robot learning project | Small shelf, few part types, VLA go/no-go on Jan 29 with a fallback ready |
-| Public data of the reference product incomplete | Check OpenROV files in sprint 0; complete the BOM ourselves or switch to the fallback |
-| Shelf slots hard to reach for the arm | Design the shelf around the PIPER workspace in sprint 0, open-top bins |
-| PIPER not supported by LeRobot out of the box | Check in sprint 0; write a LeRobot adapter on top of the ROS 2 driver |
-| Not enough VRAM for VLA training | Identify a 12 GB+ GPU in sprint 0; school or cloud as fallback |
-| VLA success rate too low | Fall back to ACT, or to scripted grasp guided by the detector |
-| Late integration | Contracts in sprint 0, walking skeleton on Dec 11, end-to-end tests from then on |
-| Blocks pass alone but fail together | Contracts reviewed by both sides, mocks kept in sync with real blocks |
+| Four months is short for robot learning | Small shelf, go/no-go on Jan 29, fallbacks ready |
+| Incomplete OpenROV data | Checked in sprint 0; complete it ourselves or switch product |
+| Slots out of reach | Shelf designed around the PIPER workspace, open-top bins |
+| PIPER not supported by LeRobot | Checked in sprint 0; adapter on top of the ROS 2 driver |
+| No 12 GB GPU | School or cloud GPU |
+| Late or broken integration | Contracts in sprint 0, walking skeleton Dec 11, end-to-end tests after |
 
 ## Open questions
 
-- Supervisors' approval of the merge and the domain change.
-- Is a Jetson provided with the PIPER? Which cameras?
-- Is a leader arm available for master-slave teleoperation (second PIPER or equivalent)?
-- GPU models and VRAM of Adrien, Antoine and Louis-Marie (run `nvidia-smi`).
-- Which parts of the vehicle go on the shelf (count, size, how similar they look)?
+- Supervisors' approval of the merge and the two deviations.
+- Hardware: Jetson, cameras, leader arm (second PIPER or equivalent).
+- GPUs of Adrien, Antoine and Louis-Marie (`nvidia-smi`).
+- Which vehicle parts go on the shelf.

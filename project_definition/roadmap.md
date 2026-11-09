@@ -37,8 +37,8 @@ Any delay on this chain delays the whole project. Software blocks (twin, knowled
 
 | Member | Tasks |
 |--------|-------|
-| Florian | Send genesis and scope to supervisors for approval. Get the PIPER and cameras; check leader arm and Jetson. Draft the NGSI-LD data model |
-| Adrien | Repository structure, Docker Compose skeleton, CI pipeline. Neo4j running |
+| Florian | Send genesis and scope to supervisors for approval. Get the PIPER and cameras; check leader arm and Jetson. Draft the NGSI-LD data model. Repository structure and Docker Compose skeleton |
+| Adrien | CI pipeline. Neo4j running |
 | Antoine | Source OpenROV data (BOM, manuals). Choose the 3 to 4 part types. Design the shelf within the PIPER workspace |
 | Louis-Marie | Write the MCP tool contracts and the robot command format. Find a GPU with 12 GB+ VRAM |
 | All | Agree on the contracts |
@@ -81,7 +81,7 @@ Holidays (Dec 21 - Jan 1): no planned work. Long training runs can run unattende
 
 | Member | Tasks |
 |--------|-------|
-| Florian | Simulator v2: stock thresholds, purchase orders, deliveries. Twin updated by robot actions |
+| Florian | Simulator v2: stock thresholds, purchase orders, deliveries, sensor alerts. Twin updated by robot actions |
 | Adrien | Automated RAG evaluation in CI. Bilingual retrieval tuning. Live shelf view in the interface |
 | Antoine | Vision v2: grasp state (in gripper, dropped). Inventory scan compared to the twin |
 | Louis-Marie | SmolVLA LoRA fine-tuning on the full dataset. Bench evaluation |

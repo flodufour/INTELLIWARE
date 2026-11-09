@@ -1,0 +1,228 @@
+<title>INTELLIWARE Architecture</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+/* Layout: one left-to-right diagram, a detail line under it, four steps. Monochrome, one accent for the selected block. */
+:root {
+  --bg: #f7f8f9;
+  --box: #ffffff;
+  --fg: #1a2229;
+  --muted: #6b7680;
+  --line: #b9c2c9;
+  --accent: #1d5f7a;
+  --font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12171b; --box: #1b2228; --fg: #e4e9ec; --muted: #94a0a8; --line: #46525b; --accent: #7cc0dc;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12171b; --box: #1b2228; --fg: #e4e9ec; --muted: #94a0a8; --line: #46525b; --accent: #7cc0dc;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5; }
+.wrap {
+  max-width: 1020px; margin: 0 auto;
+  padding-block: 32px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 24px;
+}
+h1 { margin: 0; font-size: 1.6rem; font-weight: 600; letter-spacing: 0.02em; }
+.lede { margin: 6px 0 0; color: var(--muted); max-width: 70ch; }
+
+.scroll { overflow-x: auto; }
+svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.box rect { fill: var(--box); stroke: var(--line); stroke-width: 1.2; }
+.box { cursor: pointer; outline: none; }
+.box:hover rect, .box:focus-visible rect { stroke: var(--accent); }
+.box.on rect { stroke: var(--accent); stroke-width: 2; }
+.box .t { fill: var(--fg); font: 600 15px var(--font); }
+.box .s { fill: var(--muted); font: 400 12px var(--font); }
+.person rect { stroke-dasharray: 4 3; }
+.arrow { stroke: var(--line); stroke-width: 1.4; fill: none; }
+.head { fill: var(--line); }
+.lbl { fill: var(--muted); font: 400 12px var(--font); }
+.group { fill: none; stroke: var(--line); stroke-dasharray: 2 4; }
+.glbl { fill: var(--muted); font: 400 11px var(--font); letter-spacing: 0.08em; }
+
+.detail { min-height: 3.2em; border-left: 2px solid var(--accent); padding: 2px 0 2px 14px; max-width: 75ch; }
+.detail p { margin: 0; }
+.detail .k { font-weight: 600; }
+.detail .m { color: var(--muted); font-size: 0.88rem; }
+.hint { color: var(--muted); }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.steps li { min-width: 0; display: grid; gap: 2px; }
+.steps b { color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px 20px; border-bottom: 1px solid var(--line); margin-bottom: -8px; }
+.tab { font: 400 0.95rem var(--font); color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 0; margin-bottom: -1px; cursor: pointer; }
+.tab:hover { color: var(--fg); }
+.tab[aria-pressed="true"] { color: var(--fg); font-weight: 600; border-bottom-color: var(--accent); }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.foot { margin: 0; color: var(--muted); font-size: 0.85rem; }
+@media (max-width: 720px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>INTELLIWARE</h1>
+    <p class="lede">A smart warehouse reduced to one shelf of submarine spare parts. You ask for a part in French or English; the AI finds it, explains how to use it, and a robot arm brings it.</p>
+  </header>
+
+  <div class="scroll">
+    <svg viewBox="0 0 1000 430" role="img" aria-label="Architecture diagram">
+      <defs>
+        <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path class="head" d="M0,0 L10,5 L0,10 z"></path>
+        </marker>
+      </defs>
+
+      <rect class="group" x="625" y="14" width="365" height="408" rx="10"></rect>
+      <text class="glbl" x="640" y="32">WAREHOUSE</text>
+
+      <line class="arrow" x1="160" y1="222" x2="203" y2="222" marker-end="url(#a)"></line>
+      <line class="arrow" x1="340" y1="222" x2="393" y2="222" marker-end="url(#a)"></line>
+      <path class="arrow" d="M550,222 C600,222 600,82 643,82" marker-end="url(#a)"></path>
+      <line class="arrow" x1="550" y1="222" x2="643" y2="222" marker-end="url(#a)"></line>
+      <path class="arrow" d="M550,222 C600,222 600,362 643,362" marker-end="url(#a)"></path>
+      <text class="lbl" x="596" y="214" text-anchor="middle">MCP</text>
+      <text class="lbl" x="596" y="398" text-anchor="middle">after your OK</text>
+
+      <line class="arrow" x1="850" y1="82" x2="817" y2="82" marker-end="url(#a)"></line>
+      <line class="arrow" x1="850" y1="222" x2="817" y2="222" marker-end="url(#a)"></line>
+      <line class="arrow" x1="850" y1="362" x2="817" y2="362" marker-start="url(#a)" marker-end="url(#a)"></line>
+
+      <g class="box person" data-id="tech" tabindex="0" role="button">
+        <rect x="20" y="190" width="140" height="64" rx="8"></rect>
+        <text class="t" x="90" y="218" text-anchor="middle">Technician</text>
+        <text class="s" x="90" y="238" text-anchor="middle">French or English</text>
+      </g>
+      <g class="box" data-id="interface" tabindex="0" role="button">
+        <rect x="205" y="190" width="135" height="64" rx="8"></rect>
+        <text class="t" x="272" y="218" text-anchor="middle">Chat</text>
+        <text class="s" x="272" y="238" text-anchor="middle">Streamlit</text>
+      </g>
+      <g class="box" data-id="agent" tabindex="0" role="button">
+        <rect x="395" y="190" width="155" height="64" rx="8"></rect>
+        <text class="t" x="472" y="218" text-anchor="middle">AI agent</text>
+        <text class="s" x="472" y="238" text-anchor="middle">Pydantic AI · Claude</text>
+      </g>
+
+      <g class="box" data-id="twin" tabindex="0" role="button">
+        <rect x="645" y="50" width="170" height="64" rx="8"></rect>
+        <text class="t" x="730" y="78" text-anchor="middle">Digital twin</text>
+        <text class="s" x="730" y="98" text-anchor="middle">FIWARE Orion-LD</text>
+      </g>
+      <g class="box" data-id="kb" tabindex="0" role="button">
+        <rect x="645" y="190" width="170" height="64" rx="8"></rect>
+        <text class="t" x="730" y="218" text-anchor="middle">Knowledge base</text>
+        <text class="s" x="730" y="238" text-anchor="middle">Neo4j</text>
+      </g>
+      <g class="box" data-id="robot" tabindex="0" role="button">
+        <rect x="645" y="330" width="170" height="64" rx="8"></rect>
+        <text class="t" x="730" y="358" text-anchor="middle">Robot arm</text>
+        <text class="s" x="730" y="378" text-anchor="middle">PIPER · SmolVLA</text>
+      </g>
+
+      <g class="box" data-id="simulator" tabindex="0" role="button">
+        <rect x="852" y="50" width="125" height="64" rx="8"></rect>
+        <text class="t" x="914" y="78" text-anchor="middle">Simulator</text>
+        <text class="s" x="914" y="98" text-anchor="middle">sensors, orders</text>
+      </g>
+      <g class="box" data-id="docs" tabindex="0" role="button">
+        <rect x="852" y="190" width="125" height="64" rx="8"></rect>
+        <text class="t" x="914" y="218" text-anchor="middle">Documents</text>
+        <text class="s" x="914" y="238" text-anchor="middle">OpenROV</text>
+      </g>
+      <g class="box" data-id="vision" tabindex="0" role="button">
+        <rect x="852" y="330" width="125" height="64" rx="8"></rect>
+        <text class="t" x="914" y="358" text-anchor="middle">Cameras</text>
+        <text class="s" x="914" y="378" text-anchor="middle">YOLO-World</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="detail" id="detail" aria-live="polite">
+    <p class="hint">Click a block to see what it does.</p>
+  </div>
+
+  <div class="tabs" role="group" aria-label="Scenarios">
+    <button class="tab" id="sc-diagnose" data-s="diagnose" aria-pressed="false">Diagnose</button>
+    <button class="tab" id="sc-retrieve" data-s="retrieve" aria-pressed="true">Retrieve</button>
+    <button class="tab" id="sc-store" data-s="store" aria-pressed="false">Store</button>
+    <button class="tab" id="sc-replenish" data-s="replenish" aria-pressed="false">Replenish</button>
+    <button class="tab" id="sc-inventory" data-s="inventory" aria-pressed="false">Inventory</button>
+    <button class="tab" id="sc-monitor" data-s="monitor" aria-pressed="false">Monitor</button>
+    <button class="tab" id="sc-failures" data-s="failures" aria-pressed="false">Failures</button>
+  </div>
+
+  <ol class="steps" id="steps">
+    <li><b>1. Ask</b><span>"I need a spare propeller."</span></li>
+    <li><b>2. Look up</b><span>The agent finds where it is and how to replace it.</span></li>
+    <li><b>3. Act</b><span>You confirm, the robot brings the part.</span></li>
+    <li><b>4. Record</b><span>The twin updates the stock.</span></li>
+  </ol>
+
+  <p class="foot">Each block runs in its own Docker container and is tested alone. Deadline: March 1, 2027.</p>
+</div>
+
+<script>
+const info = {
+  tech: ["Technician", "Asks in French or English and confirms every robot action.", ""],
+  interface: ["Chat", "Chat window with confirmation buttons and a live view of the shelf.", "Streamlit · Louis-Marie"],
+  agent: ["AI agent", "Understands the request, uses the warehouse blocks as tools (MCP), answers in your language. Never moves the robot without your OK.", "Pydantic AI, Claude API · Louis-Marie"],
+  twin: ["Digital twin", "Live record of every slot, part, stock level and robot task: always knows what is where.", "FIWARE Orion-LD, MongoDB · Florian"],
+  kb: ["Knowledge base", "Parts list as a graph, manuals and procedures searchable by meaning.", "Neo4j · Adrien"],
+  robot: ["Robot arm", "Stores and retrieves parts. Learns by imitating demonstrations recorded by the team. Updates the twin after each move.", "PIPER, ROS 2, LeRobot, SmolVLA · Florian, Louis-Marie"],
+  simulator: ["Simulator", "Fakes shelf temperature and humidity, purchase orders and deliveries.", "Python · Florian"],
+  docs: ["Documents", "Public parts list and manuals of the OpenROV underwater vehicle, plus procedures we write in French.", "Antoine"],
+  vision: ["Cameras", "Recognize the part, check it was grabbed, scan the shelf for missing or moved parts.", "YOLO-World · Antoine"]
+};
+const detail = document.getElementById("detail");
+const boxes = document.querySelectorAll(".box");
+function show(box) {
+  boxes.forEach(b => b.classList.toggle("on", b === box));
+  const [k, d, m] = info[box.dataset.id];
+  detail.innerHTML = "";
+  const p1 = document.createElement("p");
+  const strong = document.createElement("span");
+  strong.className = "k";
+  strong.textContent = k;
+  p1.append(strong, " " + d);
+  detail.append(p1);
+  if (m) { const p2 = document.createElement("p"); p2.className = "m"; p2.textContent = m; detail.append(p2); }
+}
+const scenarios = {
+  diagnose: [["Ask", "\"The thruster vibrates, what should I check?\""], ["Search", "The knowledge base finds the procedure and the parts involved."], ["Check", "The twin gives the stock of those parts."], ["Answer", "Procedure and available parts. \"Shall I bring them?\""]],
+  retrieve: [["Ask", "\"I need a spare propeller.\""], ["Look up", "The agent finds where it is and how to replace it."], ["Act", "You confirm, the robot brings the part."], ["Record", "The twin updates the stock."]],
+  store: [["Drop off", "You put a part on the tray: \"store this\"."], ["Identify", "The cameras recognize it, the twin picks a free slot."], ["Act", "You confirm, the robot puts it on the shelf."], ["Record", "The twin updates the stock."]],
+  replenish: [["Run low", "A part falls below its stock threshold."], ["Order", "The simulator creates a purchase order with a delivery date."], ["Ask", "\"When will it arrive?\" The agent answers."], ["Deliver", "On arrival, the part is stored."]],
+  inventory: [["Scan", "After each task, the cameras scan the shelf."], ["Compare", "The result is checked against the twin."], ["Flag", "A moved or missing part is reported."], ["Fix", "The twin is corrected."]],
+  monitor: [["Detect", "Shelf humidity goes above its threshold."], ["Check", "The knowledge base gives the storage conditions of the parts at risk."], ["Alert", "The agent warns you: which parts, what to do."], ["Record", "The alert is traced in the twin."]],
+  failures: [["Dropped part", "The cameras see it, the robot retries."], ["Missing part", "The robot stops instead of grabbing nothing."], ["Correct", "The twin is updated."], ["Inform", "The agent tells you what happened."]]
+};
+const stepsEl = document.getElementById("steps");
+const tabs = document.querySelectorAll(".tab");
+tabs.forEach(t => t.addEventListener("click", () => {
+  tabs.forEach(x => x.setAttribute("aria-pressed", String(x === t)));
+  stepsEl.replaceChildren(...scenarios[t.dataset.s].map(([k, d], i) => {
+    const li = document.createElement("li");
+    const b = document.createElement("b");
+    b.textContent = `${i + 1}. ${k}`;
+    const s = document.createElement("span");
+    s.textContent = d;
+    li.append(b, s);
+    return li;
+  }));
+}));
+boxes.forEach(b => {
+  b.addEventListener("click", () => show(b));
+  b.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(b); } });
+});
+</script>
