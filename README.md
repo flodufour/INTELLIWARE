@@ -20,6 +20,7 @@ services/         One folder and one Docker service per block
   interface/  agent/  mcp-twin/  mcp-knowledge-base/  mcp-robot/
   simulator/  vision/  robot/
 data/             OpenROV files (original license) and our procedures
+hardware/         Our CAD (SolidWorks, STEP, STL): shelf, tray, mounts
 tests/e2e/        End-to-end scenarios on the full chain
 project_definition/
 docker-compose.yml        Main machine: twin, services, agent, interface
