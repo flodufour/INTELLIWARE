@@ -52,7 +52,7 @@ Tracked in issues [#6 to #17](https://github.com/flodufour/INTELLIWARE/milestone
 | Florian | Orion-LD and MongoDB running, data model loaded. PIPER under ROS 2 with leader-follower teleoperation |
 | Adrien | BOM ingested in Neo4j as a graph. Document ingestion pipeline started |
 | Antoine | Shelf built, parts printed. First French maintenance procedures. RAG test question set v1 (FR and EN) |
-| Louis-Marie | Agent on Claude API with mock tools. Streamlit chat |
+| Louis-Marie | Agent with mock tools (local Ollama until an API key is available). Streamlit chat |
 
 Demo: chat answers from mocks; robot moved by teleoperation.
 
@@ -105,7 +105,7 @@ Demo: robot executes trained gestures on the bench; inventory scan detects a mov
 | Member | Tasks |
 |--------|-------|
 | Antoine | Test campaign: 20 trials per scenario, lighting changes, parts shifted in their slot |
-| All | Fix what the tests reveal. Stretch goals only if all criteria are met (Jetson, voice, local LLM) |
+| All | Fix what the tests reveal. Stretch goals only if all criteria are met (Jetson, voice) |
 
 **Feature freeze on Feb 12**: no new features after this date, only fixes.
 

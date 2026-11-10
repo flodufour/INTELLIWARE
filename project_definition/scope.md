@@ -44,7 +44,7 @@ Every physical action is confirmed by a human and traced in the twin.
 | Digital twin with simulated sensors (temperature, humidity) | Physical IoT sensors | Slot weight sensors, 3D view |
 | Simulated supply chain: thresholds, purchase orders, lead times | ERP or supplier integration | |
 | Text chat in French and English | Other languages | Voice interface |
-| Hosted LLM (Claude API) | | Local LLM |
+| LLM through a school API key, otherwise local (Ollama) | | |
 | Inference on a laptop GPU | | Jetson deployment |
 
 ## Building blocks
@@ -52,7 +52,7 @@ Every physical action is confirmed by a human and traced in the twin.
 | Block | Role | Technologies |
 |-------|------|--------------|
 | Interface | Chat, action confirmation, live shelf view | Streamlit |
-| Agent | Understands requests, calls tools, asks for confirmation, answers in the user's language | Pydantic AI, Claude API (Ollama later) |
+| Agent | Understands requests, calls tools, asks for confirmation, answers in the user's language | Pydantic AI, LLM via school API key or local Ollama |
 | Digital twin | Live state of shelf, slots, parts, robot, sensors, purchase orders, task history | FIWARE Orion-LD (NGSI-LD), MongoDB |
 | Knowledge base | BOM as a graph, manuals, procedures and standards as searchable chunks | Neo4j (graph + vector index), multilingual embeddings |
 | MCP servers | Expose twin, knowledge base and robot to the agent as tools | Python MCP SDK |
@@ -94,7 +94,7 @@ End-to-end tests run the scenarios on the full chain from the walking skeleton (
 - **Vision separate from the VLA**: a VLA does not report failure; the detector says whether a part is in its slot, in the gripper or dropped.
 - **Fixed-format robot instructions**: the agent turns any request, French or English, into one English instruction ("pick the propeller from slot B2"). Consistent dataset, same action in both languages.
 - **Neo4j for hybrid RAG**: graph and vector search in one database.
-- **Claude API first**: reliable tool use from day one; Pydantic AI makes a local model a configuration change.
+- **LLM provider open**: a hosted API (Claude or OpenAI) if the school provides keys, otherwise a local model via Ollama. Pydantic AI makes switching a configuration change; the agent test scenarios decide whether a local model is good enough.
 
 ## Compute
 
@@ -171,5 +171,6 @@ Targets confirmed after the first tests.
 
 ## Open questions
 
+- LLM: API keys from the school, or local Ollama.
 - Training GPU: access to school GPUs, or GPUs of Adrien, Antoine and Louis-Marie (`nvidia-smi`). Remaining hardware in [material.md](material.md).
 - Which vehicle parts go on the shelf.
