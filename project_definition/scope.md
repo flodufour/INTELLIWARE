@@ -90,7 +90,7 @@ End-to-end tests run the scenarios on the full chain from the walking skeleton (
 ## Technology choices
 
 - **The twin is the single source of truth** for what is where, updated by every robot action and every scan.
-- **SmolVLA rather than OpenVLA**: small enough to fine-tune with LoRA on one GPU and to run on a laptop GPU. Fallbacks: ACT, then a detector-guided scripted grasp.
+- **SmolVLA rather than OpenVLA**: small enough to fine-tune with LoRA on one GPU and to run on a laptop GPU. Fallbacks: ACT, then a detector-guided scripted grasp. The VLA stays a deliverable (trained, evaluated, reported) even if a fallback runs the live demo.
 - **Vision separate from the VLA**: a VLA does not report failure; the detector says whether a part is in its slot, in the gripper or dropped.
 - **Fixed-format robot instructions**: the agent turns any request, French or English, into one English instruction ("pick the propeller from slot B2"). Consistent dataset, same action in both languages.
 - **Neo4j for hybrid RAG**: graph and vector search in one database.
@@ -142,7 +142,7 @@ Deadline: **March 1, 2027**, set by the team to finish before the end-of-year ex
 | Nov 13, 2026 | Kickoff | Scope approved, contracts and mocks agreed, hardware confirmed |
 | Dec 11, 2026 | Walking skeleton | Chat to agent to twin, knowledge base and scripted robot move; simulator feeds the twin |
 | Jan 15, 2027 | First model | Demonstrations recorded, SmolVLA trained, vision detects presence and grasp state |
-| Jan 29, 2027 | VLA go/no-go | VLA kept, or replaced by a fallback |
+| Jan 29, 2027 | VLA go/no-go | VLA kept for the demo, or replaced by a fallback; VLA results reported either way |
 | Feb 12, 2027 | Feature freeze | All scenarios end to end, robustness tests done |
 | Mar 1, 2027 | Delivery | Validation report, demo, defense |
 
@@ -162,7 +162,7 @@ Targets confirmed after the first tests.
 
 | Risk | Mitigation |
 |------|------------|
-| Four months is short for robot learning | Small shelf, go/no-go on Jan 29, fallbacks ready |
+| Four months is short for robot learning | Small shelf, full pipeline tested on one slot by Dec 11, go/no-go on Jan 29, fallbacks ready |
 | Incomplete OpenROV data | Checked in sprint 0; complete it ourselves or switch product |
 | Slots out of reach | Shelf designed around the PIPER workspace, open-top bins |
 | PIPER not supported by LeRobot | Checked in sprint 0; adapter on top of the ROS 2 driver |
