@@ -19,6 +19,8 @@ A smart spare parts warehouse for an underwater vehicle, reduced to **one shelf*
 - One input/output tray.
 - A fixed RGB-D camera facing the shelf and a wrist camera on the gripper.
 
+Full hardware list and status in [material.md](material.md).
+
 ## Scenarios
 
 | Scenario | What happens |
@@ -169,6 +171,6 @@ Targets confirmed after the first tests.
 ## Open questions
 
 - Supervisors' approval of the merge and the two deviations.
-- Hardware: Jetson, cameras, leader arm (second PIPER or equivalent).
+- Hardware: see [material.md](material.md).
 - GPUs of Adrien, Antoine and Louis-Marie (`nvidia-smi`).
 - Which vehicle parts go on the shelf.
