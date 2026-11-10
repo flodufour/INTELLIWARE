@@ -1,6 +1,6 @@
 # INTELLIWARE - Roadmap
 
-From November 4, 2026 to the **March 1, 2027** deadline. What we build is in [scope.md](scope.md); this document says when and how.
+From November 4, 2026 to the **March 1, 2027** deadline (team deadline, one to two weeks before the end-of-year exams). What we build is in [scope.md](scope.md); this document says when and how.
 
 ## Tracking
 
@@ -60,18 +60,18 @@ Demo: chat answers from mocks; robot moved by teleoperation.
 
 | Member | Tasks |
 |--------|-------|
-| Florian | Simulator v1 (sensors). Scripted pick from one slot |
+| Florian | Simulator v1 (sensors). Scripted pick from one slot. Recording pipeline in LeRobot format, 10 demonstrations on one slot |
 | Adrien | Twin and knowledge base MCP servers. Vector index on documents |
 | Antoine | Vision v1: part presence per slot. Safety and confirmation rules written |
-| Louis-Marie | Robot MCP server on the scripted move. Confirmation flow. Agent wired to the real twin and knowledge base |
+| Louis-Marie | Robot MCP server on the scripted move. Confirmation flow. Agent wired to the real twin and knowledge base. Short training on the 10 demonstrations, run on the robot |
 
-Demo: **first end-to-end chain**. A request in the chat moves the robot and updates the twin.
+Demo: **first end-to-end chain**. A request in the chat moves the robot and updates the twin. **Robot pipeline check**: record, train and run a learned gesture on one slot, so problems show up before January.
 
 ### Sprint 3 - Data collection (Dec 14 - Dec 18)
 
 | Member | Tasks |
 |--------|-------|
-| Florian | Recording pipeline in LeRobot format |
+| Florian | Recording sessions and dataset quality checks |
 | Louis-Marie | First SmolVLA training run on a small dataset, to validate the pipeline |
 | All | Record demonstrations: every slot, store and retrieve, including drops and recoveries |
 
@@ -98,7 +98,7 @@ Demo: robot executes trained gestures on the bench; inventory scan detects a mov
 | Antoine | Failure handling end to end: retry after drop, missing part reported |
 | Louis-Marie | Agent handles all scenarios in French and English |
 
-**Go/no-go on Jan 29**: if the VLA success rate is far below 80%, switch to ACT or to scripted grasp guided by the detector. Both fallbacks must be ready by then.
+**Go/no-go on Jan 29**: if the VLA success rate is far below 80%, switch to ACT or to scripted grasp guided by the detector. Both fallbacks must be ready by then. Either way, the VLA is evaluated and reported (proposal 7).
 
 ### Sprint 6 - Robustness (Feb 1 - Feb 12)
 
