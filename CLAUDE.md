@@ -11,6 +11,7 @@
 - `project_definition/genesis.md`: team, origin, vision.
 - `project_definition/scope.md`: what we build and with which technologies. Source of truth for scope.
 - `project_definition/roadmap.md`: sprints, dates, way of working. Deadline: March 1, 2027.
+- `project_definition/material.md`: hardware needed, who provides it (school or us), status.
 - `project_definition/architecture.html`: one-diagram view of blocks, technologies and owners. Published at https://claude.ai/artifact/NJPMhxsZyBUMdeQQLUSEfY (republish after changes).
 - `project_definition/project_propositions.pdf`: original proposals (we merge 7 and 10).
 - Board: https://github.com/users/flodufour/projects/4

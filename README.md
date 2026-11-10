@@ -6,6 +6,7 @@ A one-shelf smart warehouse for an underwater vehicle: a PIPER arm stores and re
 - [Genesis](project_definition/genesis.md): team, origin, vision
 - [Scope](project_definition/scope.md): what we build and with which technologies
 - [Roadmap](project_definition/roadmap.md): sprints, dates, way of working
+- [Material](project_definition/material.md): hardware needed, source and status
 - [Architecture](project_definition/architecture.html): one-page view of the blocks ([online](https://claude.ai/artifact/NJPMhxsZyBUMdeQQLUSEfY))
 - [Contributing](CONTRIBUTING.md): git conventions
 
