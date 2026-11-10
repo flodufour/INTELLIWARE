@@ -1,0 +1,9 @@
+# CAD files: binary, never converted or diffed
+*.SLDPRT binary
+*.sldprt binary
+*.SLDASM binary
+*.sldasm binary
+*.SLDDRW binary
+*.slddrw binary
+*.STL binary
+*.stl binary
