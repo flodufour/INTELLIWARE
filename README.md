@@ -1,6 +1,8 @@
 # INTELLIWARE
 A one-shelf smart warehouse for an underwater vehicle: a PIPER arm stores and retrieves spare parts, a digital twin knows what is where, and an AI agent answers technicians in French or English. ESILV A4 project, 2026-27.
 
+Documentation site: https://flodufour.github.io/INTELLIWARE/
+
 ## Documents
 
 - [Genesis](project_definition/genesis.md): team, origin, vision
