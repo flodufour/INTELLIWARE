@@ -1,0 +1,11 @@
+# Robot machine: PIPER control and vision, next to the arm (needs the NVIDIA GPU later).
+
+name: intelliware-robot
+
+services:
+  robot:
+    build: services/robot
+    restart: unless-stopped
+  vision:
+    build: services/vision
+    restart: unless-stopped
