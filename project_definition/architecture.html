@@ -111,7 +111,7 @@ svg { display: block; width: 100%; min-width: 760px; height: auto; }
       <g class="box" data-id="agent" tabindex="0" role="button">
         <rect x="395" y="190" width="155" height="64" rx="8"></rect>
         <text class="t" x="472" y="218" text-anchor="middle">AI agent</text>
-        <text class="s" x="472" y="238" text-anchor="middle">Pydantic AI · Claude</text>
+        <text class="s" x="472" y="238" text-anchor="middle">Pydantic AI · LLM</text>
       </g>
 
       <g class="box" data-id="twin" tabindex="0" role="button">
@@ -176,7 +176,7 @@ svg { display: block; width: 100%; min-width: 760px; height: auto; }
 const info = {
   tech: ["Technician", "Asks in French or English and confirms every robot action.", ""],
   interface: ["Chat", "Chat window with confirmation buttons and a live view of the shelf.", "Streamlit · Louis-Marie"],
-  agent: ["AI agent", "Understands the request, uses the warehouse blocks as tools (MCP), answers in your language. Never moves the robot without your OK.", "Pydantic AI, Claude API · Louis-Marie"],
+  agent: ["AI agent", "Understands the request, uses the warehouse blocks as tools (MCP), answers in your language. Never moves the robot without your OK.", "Pydantic AI, LLM via school API key or local Ollama · Louis-Marie"],
   twin: ["Digital twin", "Live record of every slot, part, stock level and robot task: always knows what is where.", "FIWARE Orion-LD, MongoDB · Florian"],
   kb: ["Knowledge base", "Parts list as a graph, manuals and procedures searchable by meaning.", "Neo4j · Adrien"],
   robot: ["Robot arm", "Stores and retrieves parts. Learns by imitating demonstrations recorded by the team. Updates the twin after each move.", "PIPER, ROS 2, LeRobot, SmolVLA · Florian, Louis-Marie"],
