@@ -1,6 +1,6 @@
 # INTELLIWARE - Roadmap
 
-From November 4, 2026 to the **March 1, 2027** deadline. What we build is in [scope.md](scope.md); this document says when and how.
+From November 4, 2026 to the **March 1, 2027** deadline (team deadline, one to two weeks before the end-of-year exams). What we build is in [scope.md](scope.md); this document says when and how.
 
 ## Tracking
 

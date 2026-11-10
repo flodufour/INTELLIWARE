@@ -135,7 +135,7 @@ Everyone records robot demonstrations.
 
 ## Milestones
 
-Deadline: **March 1, 2027**. Sprints in [roadmap.md](roadmap.md).
+Deadline: **March 1, 2027**, set by the team to finish before the end-of-year exams, with one to two weeks of margin. Sprints in [roadmap.md](roadmap.md).
 
 | Date | Milestone | Done when |
 |------|-----------|-----------|
