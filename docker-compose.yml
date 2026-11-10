@@ -1,0 +1,40 @@
+# Main machine: everything except robot and vision.
+# Neo4j is added in issue #11.
+
+services:
+  mongo:
+    image: mongo:4.4  # Orion-LD legacy driver does not support Mongo 5.1+
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+
+  orion-ld:
+    image: fiware/orion-ld:1.6.0
+    restart: unless-stopped
+    command: -dbhost mongo
+    depends_on:
+      - mongo
+    ports:
+      - "1026:1026"
+
+  interface:
+    build: services/interface
+    restart: unless-stopped
+  agent:
+    build: services/agent
+    restart: unless-stopped
+  mcp-twin:
+    build: services/mcp-twin
+    restart: unless-stopped
+  mcp-knowledge-base:
+    build: services/mcp-knowledge-base
+    restart: unless-stopped
+  mcp-robot:
+    build: services/mcp-robot
+    restart: unless-stopped
+  simulator:
+    build: services/simulator
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
