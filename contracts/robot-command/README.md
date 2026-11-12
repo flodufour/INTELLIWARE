@@ -15,7 +15,7 @@ HTTP with JSON bodies. The two services run on different machines, so ROS 2 stay
 |--------|------|------|----------|
 | `POST` | `/tasks` | Command | `202` Task status (`queued`), `409` if a task is already running, `422` if the command is invalid |
 | `GET` | `/tasks/{task_id}` | | `200` Task status, `404` if unknown |
-| `POST` | `/stop` | | `200` Task status of the stopped task, or `{}` if idle. Stops the arm at once |
+| `POST` | `/stop` | | `200` Task status of the stopped task, or `{}` if idle. Stops the arm at once and frees the robot (see [Stop](#stop)) |
 | `GET` | `/health` | | `200` `{"state": "idle" \| "busy" \| "error", "task_id": "..." \| null}` |
 
 ## Command
@@ -71,7 +71,7 @@ The controller rejects with `422` a command whose `instruction` does not match i
 | `status` | string | `queued`, `running`, `succeeded`, `failed`, `stopped` |
 | `attempts` | integer | Grasp attempts so far, `0` before the first |
 | `failure` | string or null | Set only when `status` is `failed`, see below |
-| `part_location` | string or null | Where vision last saw the part: `slot`, `tray`, `gripper`, `unknown`. Null for `home` |
+| `part_location` | string or null | Where vision last saw the part: `slot`, `tray`, `gripper`, `unknown`. Reported from vision on every final status, including `stopped`. Null for `home` |
 | `message` | string | Short English text for logs and the technician |
 | `started_at`, `finished_at` | string or null | ISO 8601 UTC |
 
@@ -88,6 +88,12 @@ The controller rejects with `422` a command whose `instruction` does not match i
 | `robot_error` | Driver, CAN or vision error | No |
 
 Every failure ends with the arm stopped in a safe pose. A missing part is always reported, never retried silently.
+
+## Stop
+
+`POST /stop` is a software stop only: it depends on the network and the software. **A physical emergency stop on the arm remains mandatory, whatever the software state.** Safety rules: Antoine, sprint 2.
+
+After a stop the robot is free at once (`/health` returns `idle`). The part may be in the gripper: `part_location` says where vision sees it (`gripper` or `unknown`), and the twin is corrected from it.
 
 ## Mock
 
