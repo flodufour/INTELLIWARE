@@ -51,7 +51,7 @@ Slot          {slot, level: int, part: str | null}
 PurchaseOrder {id, part, quantity, supplier, status: ordered | delivered, ordered_at, expected_at}
 Sensor        {sensor, kind: temperature | humidity, value: float, unit, min: float | null, max: float | null, status: ok | alert, observed_at}
 Alert         {id, sensor, kind, value, limit, raised_at, acknowledged_by: str | null, acknowledged_at}
-Task          {task_id, action: store | retrieve | home, part, slot, status, failure, confirmed_by, started_at, finished_at}
+Task          {task_id, action: store | retrieve | home, part, slot, status, failure, confirmed_by: str | null, started_at, finished_at}
 ```
 
 A slot holds one part, so `stock` is the number of slots holding that part type. Purchase orders are created by the simulator when stock falls below `threshold`; the agent only reads them.

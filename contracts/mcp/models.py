@@ -112,7 +112,7 @@ class Task(BaseModel):
     slot: str | None
     status: Literal["queued", "running", "succeeded", "failed", "stopped"]
     failure: str | None
-    confirmed_by: str
+    confirmed_by: str | None  # absent for automatic home tasks
     started_at: str | None
     finished_at: str | None
 
