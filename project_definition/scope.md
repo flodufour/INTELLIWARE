@@ -85,7 +85,7 @@ Every block can be developed, run and tested alone.
 | Vision | Labeled images of the shelf |
 | Robot | Bench trials on fixed commands |
 
-End-to-end tests run the scenarios on the full chain from the walking skeleton (Dec 11, 2026) onward.
+End-to-end tests run the scenarios on the full chain from the software walking skeleton (Jan 4, 2027) onward, on the real robot from Jan 15.
 
 ## Technology choices
 
@@ -135,14 +135,15 @@ Everyone records robot demonstrations.
 
 ## Milestones
 
-Deadline: **March 1, 2027**, set by the team to finish before the end-of-year exams, with one to two weeks of margin. Sprints in [roadmap.md](roadmap.md).
+Deadline: **March 1, 2027**, set by the team to finish before the end-of-year exams, with one to two weeks of margin. No project work during the exams (Nov 30 - Dec 18) and no robot access from Nov 28 to Jan 3. Sprints in [roadmap.md](roadmap.md).
 
 | Date | Milestone | Done when |
 |------|-----------|-----------|
-| Nov 13, 2026 | Kickoff | Scope approved, contracts and mocks agreed, hardware confirmed |
-| Dec 11, 2026 | Walking skeleton | Chat to agent to twin, knowledge base and scripted robot move; simulator feeds the twin |
-| Jan 15, 2027 | First model | Demonstrations recorded, SmolVLA trained, vision detects presence and grasp state |
-| Jan 29, 2027 | VLA go/no-go | VLA kept for the demo, or replaced by a fallback; VLA results reported either way |
+| Nov 16, 2026 | Kickoff | Scope approved, contracts and mocks agreed, hardware confirmed |
+| Nov 27, 2026 | Robot pipeline check | Teleoperation, recording and scripted pick on one slot; demonstrations and shelf images recorded for remote work |
+| Jan 4, 2027 | Software walking skeleton | Chat to agent to real twin and knowledge base, task on the robot mock; simulator feeds the twin |
+| Jan 15, 2027 | Walking skeleton | Same chain on the real robot; demonstrations recorded on every slot, SmolVLA trained |
+| Feb 5, 2027 | VLA go/no-go | VLA kept for the demo, or replaced by a fallback; VLA results reported either way |
 | Feb 12, 2027 | Feature freeze | All scenarios end to end, robustness tests done |
 | Mar 1, 2027 | Delivery | Validation report, demo, defense |
 
@@ -162,12 +163,13 @@ Targets confirmed after the first tests.
 
 | Risk | Mitigation |
 |------|------------|
-| Four months is short for robot learning | Small shelf, full pipeline tested on one slot by Dec 11, go/no-go on Jan 29, fallbacks ready |
+| Four months is short for robot learning | Small shelf, robot pipeline checked on one slot by Nov 27, fallbacks ready by Jan 29, go/no-go on Feb 5 |
+| No robot access from Nov 28 to Jan 3 | Robot tasks first in sprint 1; demonstrations and shelf images recorded for remote work; software and first training during the holidays |
 | Incomplete OpenROV data | Checked in sprint 0; complete it ourselves or switch product |
 | Slots out of reach | Shelf designed around the PIPER workspace, open-top bins |
 | PIPER not supported by LeRobot | Checked in sprint 0; adapter on top of the ROS 2 driver |
 | No 12 GB GPU | School or cloud GPU |
-| Late or broken integration | Contracts in sprint 0, walking skeleton Dec 11, end-to-end tests after |
+| Late or broken integration | Contracts in sprint 0, software walking skeleton Jan 4, real one Jan 15, end-to-end tests after |
 
 ## Open questions
 
