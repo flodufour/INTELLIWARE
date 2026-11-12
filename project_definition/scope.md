@@ -85,7 +85,7 @@ Every block can be developed, run and tested alone.
 | Vision | Labeled images of the shelf |
 | Robot | Bench trials on fixed commands |
 
-End-to-end tests run the scenarios on the full chain from the walking skeleton (Dec 14, 2026) onward.
+End-to-end tests run the scenarios on the full chain from the walking skeleton (Dec 11, 2026) onward.
 
 ## Technology choices
 
@@ -140,7 +140,7 @@ Deadline: **March 1, 2027**, set by the team to finish before the end-of-year ex
 | Date | Milestone | Done when |
 |------|-----------|-----------|
 | Nov 16, 2026 | Kickoff | Scope approved, contracts and mocks agreed, hardware confirmed |
-| Dec 14, 2026 | Walking skeleton | Chat to agent to twin, knowledge base and scripted robot move; simulator feeds the twin |
+| Dec 11, 2026 | Walking skeleton | Chat to agent to twin, knowledge base and scripted robot move; simulator feeds the twin |
 | Jan 15, 2027 | First model | Demonstrations recorded, SmolVLA trained, vision detects presence and grasp state |
 | Jan 29, 2027 | VLA go/no-go | VLA kept for the demo, or replaced by a fallback; VLA results reported either way |
 | Feb 12, 2027 | Feature freeze | All scenarios end to end, robustness tests done |
@@ -162,12 +162,12 @@ Targets confirmed after the first tests.
 
 | Risk | Mitigation |
 |------|------------|
-| Four months is short for robot learning | Small shelf, full pipeline tested on one slot by Dec 14, go/no-go on Jan 29, fallbacks ready |
+| Four months is short for robot learning | Small shelf, full pipeline tested on one slot by Dec 11, go/no-go on Jan 29, fallbacks ready |
 | Incomplete OpenROV data | Checked in sprint 0; complete it ourselves or switch product |
 | Slots out of reach | Shelf designed around the PIPER workspace, open-top bins |
 | PIPER not supported by LeRobot | Checked in sprint 0; adapter on top of the ROS 2 driver |
 | No 12 GB GPU | School or cloud GPU |
-| Late or broken integration | Contracts in sprint 0, walking skeleton Dec 14, end-to-end tests after |
+| Late or broken integration | Contracts in sprint 0, walking skeleton Dec 11, end-to-end tests after |
 
 ## Open questions
 

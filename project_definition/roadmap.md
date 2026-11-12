@@ -13,9 +13,9 @@ From November 4, 2026 to the **March 1, 2027** deadline (team deadline, one to t
 | Sprint | Dates | Goal | Ends with |
 |--------|-------|------|-----------|
 | [0](https://github.com/flodufour/INTELLIWARE/milestone/1) | Nov 4 - Nov 16 | Kickoff | Scope approved, contracts agreed, hardware confirmed |
-| [1](https://github.com/flodufour/INTELLIWARE/milestone/2) | Nov 17 - Nov 30 | Foundations | Every block runs alone, robot teleoperated |
-| [2](https://github.com/flodufour/INTELLIWARE/milestone/3) | Dec 1 - Dec 14 | Walking skeleton | First end-to-end chain |
-| [3](https://github.com/flodufour/INTELLIWARE/milestone/4) | Dec 15 - Dec 18 | Data collection | Demonstration dataset started, training pipeline tested |
+| [1](https://github.com/flodufour/INTELLIWARE/milestone/2) | Nov 17 - Nov 27 | Foundations | Every block runs alone, robot teleoperated |
+| [2](https://github.com/flodufour/INTELLIWARE/milestone/3) | Nov 30 - Dec 11 | Walking skeleton | First end-to-end chain |
+| [3](https://github.com/flodufour/INTELLIWARE/milestone/4) | Dec 14 - Dec 18 | Data collection | Demonstration dataset started, training pipeline tested |
 | - | Dec 21 - Jan 1 | Holidays | Buffer, long training runs can run unattended |
 | [4](https://github.com/flodufour/INTELLIWARE/milestone/5) | Jan 4 - Jan 15 | Intelligence | SmolVLA trained, vision complete, supply chain simulated |
 | [5](https://github.com/flodufour/INTELLIWARE/milestone/6) | Jan 18 - Jan 29 | Integration | All scenarios end to end, **VLA go/no-go** |
@@ -45,7 +45,7 @@ Any delay on this chain delays the whole project. Software blocks (twin, knowled
 
 Tracked in issues [#6 to #17](https://github.com/flodufour/INTELLIWARE/milestone/1). The GitHub board, milestones and labels are set up.
 
-### Sprint 1 - Foundations (Nov 17 - Nov 30)
+### Sprint 1 - Foundations (Nov 17 - Nov 27)
 
 | Member | Tasks |
 |--------|-------|
@@ -56,7 +56,7 @@ Tracked in issues [#6 to #17](https://github.com/flodufour/INTELLIWARE/milestone
 
 Demo: chat answers from mocks; robot moved by teleoperation.
 
-### Sprint 2 - Walking skeleton (Dec 1 - Dec 14)
+### Sprint 2 - Walking skeleton (Nov 30 - Dec 11)
 
 | Member | Tasks |
 |--------|-------|
@@ -67,7 +67,7 @@ Demo: chat answers from mocks; robot moved by teleoperation.
 
 Demo: **first end-to-end chain**. A request in the chat moves the robot and updates the twin. **Robot pipeline check**: record, train and run a learned gesture on one slot, so problems show up before January.
 
-### Sprint 3 - Data collection (Dec 15 - Dec 18)
+### Sprint 3 - Data collection (Dec 14 - Dec 18)
 
 | Member | Tasks |
 |--------|-------|
