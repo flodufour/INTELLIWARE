@@ -48,11 +48,16 @@ def validate(cmd: dict) -> str | None:
 
 
 def finish(task: dict, status: str, **fields) -> None:
-    task.update(status=status, finished_at=now(), **fields)
+    """Set a final status and free the robot, unless the task already ended (stopped)."""
+    global current
+    with lock:
+        if current != task["task_id"]:
+            return
+        task.update(status=status, finished_at=now(), **fields)
+        current = None
 
 
 def run(cmd: dict) -> None:
-    global current
     task = tasks[cmd["task_id"]]
     action = cmd["action"]
     source = "tray" if action == "store" else "slot"
@@ -62,23 +67,19 @@ def run(cmd: dict) -> None:
     if cmd.get("slot") == "Z9":
         finish(task, "failed", failure="part_missing", part_location="unknown",
                message=f"no part in {source}")
-    else:
-        attempts = MAX_ATTEMPTS if cmd.get("part") == "broken" else 1
-        for attempt in range(1, attempts + 1):
-            task["attempts"] = attempt
-            time.sleep(TASK_SECONDS / attempts)
-            if task["status"] == "stopped":
-                break
+        return
+    attempts = MAX_ATTEMPTS if cmd.get("part") == "broken" else 1
+    for attempt in range(1, attempts + 1):
+        task["attempts"] = attempt
+        time.sleep(TASK_SECONDS / attempts)
         if task["status"] == "stopped":
-            pass
-        elif cmd.get("part") == "broken":
-            finish(task, "failed", failure="grasp_failed", part_location=source,
-                   message=f"part dropped {MAX_ATTEMPTS} times")
-        else:
-            finish(task, "succeeded", part_location=None if action == "home" else target,
-                   message="done")
-    with lock:
-        current = None
+            return
+    if cmd.get("part") == "broken":
+        finish(task, "failed", failure="grasp_failed", part_location=source,
+               message=f"part dropped {MAX_ATTEMPTS} times")
+    else:
+        finish(task, "succeeded", part_location=None if action == "home" else target,
+               message="done")
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -101,10 +102,9 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:
         global current
         if self.path == "/stop":
-            with lock:
-                task = tasks.get(current) if current else None
-                if task:
-                    finish(task, "stopped", message="stopped on request")
+            task = tasks.get(current) if current else None
+            if task:
+                finish(task, "stopped", part_location="unknown", message="stopped on request")
             self.reply(200, task or {})
             return
         if self.path != "/tasks":
