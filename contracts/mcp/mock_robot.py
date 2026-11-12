@@ -13,12 +13,14 @@ import re
 import uuid
 
 from mcp.server.mcpserver import MCPServer
+from mcp.types import ToolAnnotations
 
 from models import SLOT_PATTERN, RobotStatus, Scan, Stopped, TaskResult, TrayPart, fail
 
 TASK_SECONDS = 2
 SHELF = {"A1": "propeller", "A2": "propeller", "A3": "cap", "B1": "clip", "B2": None, "B3": None}
 state = {"task_id": None, "stop": False}
+PHYSICAL = ToolAnnotations(destructive_hint=True)  # approval-required, see README
 
 server = MCPServer("robot", instructions="PIPER arm and shelf vision. Physical actions need a human confirmation.")
 
@@ -29,7 +31,7 @@ def busy():
 
 async def run_task(part: str, slot: str, confirmed_by: str, source: str, target: str) -> TaskResult:
     if not confirmed_by.strip():
-        return fail("not_confirmed", "ask the technician to confirm, then pass their name as confirmed_by")
+        return fail("not_confirmed", "confirmed_by is empty: the interface must get the technician approval first")
     if not re.match(SLOT_PATTERN, slot):
         return fail("invalid_argument", f"slot must match {SLOT_PATTERN}")
     if state["task_id"]:
@@ -61,15 +63,15 @@ def identify_tray_part() -> TrayPart:
     return TrayPart(part="propeller", confidence=0.93)
 
 
-@server.tool()
+@server.tool(annotations=PHYSICAL)
 async def store_part(part: str, slot: str, confirmed_by: str) -> TaskResult:
-    """Move the part from the tray to the slot. Ask the technician to confirm first."""
+    """Move the part from the tray to the slot. Approval-required: confirmed_by is set by the interface."""
     return await run_task(part, slot, confirmed_by, source="tray", target="slot")
 
 
-@server.tool()
+@server.tool(annotations=PHYSICAL)
 async def retrieve_part(part: str, slot: str, confirmed_by: str) -> TaskResult:
-    """Bring the part from the slot to the tray. Ask the technician to confirm first."""
+    """Bring the part from the slot to the tray. Approval-required: confirmed_by is set by the interface."""
     return await run_task(part, slot, confirmed_by, source="slot", target="tray")
 
 

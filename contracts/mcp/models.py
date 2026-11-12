@@ -165,6 +165,7 @@ class PartInfo(BaseModel):
     subparts: list[str]
     related_parts: list[str]
     documents: list[DocumentRef]
+    procedures: list[str]
     storage: Storage
 
 

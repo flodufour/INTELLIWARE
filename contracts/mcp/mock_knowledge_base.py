@@ -56,13 +56,14 @@ PARTS = {
     "propeller": {"part": "propeller", "names": {"en": "propeller", "fr": "hélice"}, "assembly": "thruster",
                   "subparts": [], "related_parts": [],
                   "documents": [{"document": "procedures/propeller.md", "section": "Remplacement"}],
+                  "procedures": ["PROC-THRUSTER-01", "PROC-PROPELLER-02"],
                   "storage": {"temperature_min": 5.0, "temperature_max": 40.0, "humidity_max": 80.0}},
     "cap": {"part": "cap", "names": {"en": "battery tube cap", "fr": "bouchon de tube batterie"},
             "assembly": "battery tube", "subparts": [], "related_parts": [],
-            "documents": [{"document": "openrov/manual.pdf", "section": "Battery tubes"}],
+            "documents": [{"document": "openrov/manual.pdf", "section": "Battery tubes"}], "procedures": [],
             "storage": {"temperature_min": 5.0, "temperature_max": 30.0, "humidity_max": 60.0}},
     "clip": {"part": "clip", "names": {"en": "cable clip", "fr": "clip de câble"}, "assembly": "tether",
-             "subparts": [], "related_parts": [], "documents": [],
+             "subparts": [], "related_parts": [], "documents": [], "procedures": [],
              "storage": {"temperature_min": 0.0, "temperature_max": 40.0, "humidity_max": 80.0}},
 }
 

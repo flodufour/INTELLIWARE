@@ -54,7 +54,7 @@ Alert         {id, sensor, kind, value, limit, raised_at, acknowledged_by: str |
 Task          {task_id, action: store | retrieve | home, part, slot, status, failure, confirmed_by, started_at, finished_at}
 ```
 
-`stock` counts parts on the shelf. Purchase orders are created by the simulator when stock falls below `threshold`; the agent only reads them.
+A slot holds one part, so `stock` is the number of slots holding that part type. Purchase orders are created by the simulator when stock falls below `threshold`; the agent only reads them.
 
 ## Knowledge base server
 
@@ -70,16 +70,23 @@ Searches the OpenROV documentation and our procedures in Neo4j.
 Chunk     {chunk_id, text, document, section, kind: manual | procedure | standard, language: en | fr, procedure_id: str | null, score: float}
 Procedure {procedure_id, title, language, steps: [str], parts: [str], document}
 PartInfo  {part, names: {en, fr}, assembly: str | null, subparts: [str], related_parts: [str],
-           documents: [{document, section}], storage: {temperature_min, temperature_max, humidity_max}}
+           documents: [{document, section}], procedures: [str],
+           storage: {temperature_min, temperature_max, humidity_max}}
 ```
 
-`query` can be French or English; the multilingual embeddings match both. `assembly` is the parent in the BOM graph, `related_parts` the parts usually replaced together.
+`query` can be French or English; the multilingual embeddings match both. `assembly` is the parent in the BOM graph, `related_parts` the parts usually replaced together, `procedures` the ids of the procedures that involve the part.
 
 ## Robot server
 
 Drives the arm through the [robot-command](../robot-command/) contract and vision. After every task and scan it writes the result to the twin (Task entity, slot contents).
 
-Physical actions (`store_part`, `retrieve_part`) need a human confirmation: the agent asks in the interface first and passes who confirmed as `confirmed_by`. They block until the task ends and return its final status. A failed task is a normal result, not a tool error.
+Physical actions (`store_part`, `retrieve_part`) are approval-required. The confirmation never depends on the LLM:
+
+- The agent declares them as approval-required tools (Pydantic AI deferred tools). When the model calls one, the run pauses and the interface shows the action to the technician.
+- On approval, the interface sets `confirmed_by` to the technician's name, replacing any value from the model. On refusal, the tool is not called.
+- The servers mark both tools with the MCP annotation `destructiveHint: true`.
+
+They block until the task ends, up to the 120 s task timeout: the agent's MCP client timeout must be above that (150 s). A failed task is a normal result, not a tool error.
 
 | Tool | Inputs | Output | Errors |
 |------|--------|--------|--------|
@@ -103,14 +110,15 @@ Mismatch   {slot, twin: str | null, seen: str | null}
 |----------|------------|
 | Diagnose | `search_documents` -> `get_procedure` -> `get_part` for each part |
 | Store | `identify_tray_part` -> `find_free_slot` -> confirm -> `store_part` |
-| Retrieve | `get_part` -> `get_procedure` (replacement) -> confirm -> `retrieve_part` |
+| Retrieve | `get_part` -> `get_part_info` -> `get_procedure` (replacement) -> confirm -> `retrieve_part` |
 | Replenish | `get_part` -> `list_purchase_orders` |
 | Inventory | `scan_shelf` |
 | Monitor | `list_alerts` -> `list_sensors` -> `get_part_info` for parts on the shelf -> `acknowledge_alert` |
+| Failures | `store_part` or `retrieve_part` returns `failed` or `stopped` -> the agent reports `failure` and `part_location` (the twin is already corrected). `grasp_failed`: already retried by the controller; the agent may offer one more try, with a new confirmation. `part_missing`: never retried, `scan_shelf` to check the shelf. Stop: `stop_robot` at any time |
 
 ## Mocks
 
-In-memory, with fixed data (placeholder parts `propeller`, `cap`, `clip` until #13). The three mocks do not share state. They need [uv](https://docs.astral.sh/uv/), which installs the MCP SDK (2.x) on first run.
+In-memory, with fixed data (placeholder parts `propeller`, `cap`, `clip` until #13). The three mocks do not share state. They need [uv](https://docs.astral.sh/uv/), which installs the MCP SDK (2.x) on first run. Install uv with `curl -LsSf https://astral.sh/uv/install.sh | sh` (Windows: `winget install astral-sh.uv`).
 
 ```sh
 uv run contracts/mcp/mock_twin.py            # :8001/mcp
