@@ -13,15 +13,16 @@ From November 4, 2026 to the **March 1, 2027** deadline (team deadline, one to t
 | Sprint | Dates | Goal | Ends with |
 |--------|-------|------|-----------|
 | [0](https://github.com/flodufour/INTELLIWARE/milestone/1) | Nov 4 - Nov 16 | Kickoff | Scope approved, contracts agreed, hardware confirmed |
-| [1](https://github.com/flodufour/INTELLIWARE/milestone/2) | Nov 17 - Nov 27 | Foundations | Every block runs alone, robot teleoperated |
-| [2](https://github.com/flodufour/INTELLIWARE/milestone/3) | Nov 30 - Dec 11 | Walking skeleton | First end-to-end chain |
-| [3](https://github.com/flodufour/INTELLIWARE/milestone/4) | Dec 14 - Dec 18 | Data collection | Demonstration dataset started, training pipeline tested |
-| - | Dec 21 - Jan 1 | Holidays | Buffer, long training runs can run unattended |
-| [4](https://github.com/flodufour/INTELLIWARE/milestone/5) | Jan 4 - Jan 15 | Intelligence | SmolVLA trained, vision complete, supply chain simulated |
-| [5](https://github.com/flodufour/INTELLIWARE/milestone/6) | Jan 18 - Jan 29 | Integration | All scenarios end to end, **VLA go/no-go** |
-| [6](https://github.com/flodufour/INTELLIWARE/milestone/7) | Feb 1 - Feb 12 | Robustness | Test campaign done, **feature freeze** |
-| [7](https://github.com/flodufour/INTELLIWARE/milestone/8) | Feb 15 - Feb 26 | Delivery | Report, demo video, rehearsed defense |
+| [1](https://github.com/flodufour/INTELLIWARE/milestone/2) | Nov 17 - Nov 27 | Robot first | Robot pipeline checked on one slot, software blocks running alone |
+| - | Nov 30 - Dec 18 | Exams | No project work |
+| [2](https://github.com/flodufour/INTELLIWARE/milestone/3) | Dec 21 - Jan 1 | Software | Software walking skeleton on the robot mock, first training run |
+| [3](https://github.com/flodufour/INTELLIWARE/milestone/4) | Jan 4 - Jan 15 | Walking skeleton and data | First end-to-end chain on the real robot, demonstration dataset, SmolVLA trained |
+| [4](https://github.com/flodufour/INTELLIWARE/milestone/5) | Jan 18 - Jan 29 | Integration | All scenarios on the real robot, fallbacks ready |
+| [5](https://github.com/flodufour/INTELLIWARE/milestone/6) | Feb 1 - Feb 12 | Robustness | **VLA go/no-go (Feb 5)**, test campaign done, **feature freeze** |
+| [6](https://github.com/flodufour/INTELLIWARE/milestone/7) | Feb 15 - Feb 26 | Delivery | Report, demo video, rehearsed defense |
 | - | Mar 1 | Deadline | Final delivery |
+
+Availability: the robot is at school, reachable until Nov 27 and from Jan 4. No project work during the exams (Nov 30 - Dec 18). Holidays (Dec 21 - Jan 1): software only, remote.
 
 ## Critical path
 
@@ -29,7 +30,7 @@ The robot is the longest chain and sets the pace:
 
 hardware confirmed -> teleoperation -> shelf built -> demonstrations recorded -> VLA trained -> VLA integrated -> robustness tests
 
-Any delay on this chain delays the whole project. Software blocks (twin, knowledge base, agent) have more slack and use mocks until the robot is ready.
+Any delay on this chain delays the whole project. With no robot access from Nov 28 to Jan 3, sprint 1 checks the whole robot pipeline on one slot and records what lets work continue remotely (demonstrations, shelf images). Software blocks (twin, knowledge base, agent) have more slack and use mocks until the robot is ready.
 
 ## Sprints
 
@@ -45,62 +46,60 @@ Any delay on this chain delays the whole project. Software blocks (twin, knowled
 
 Tracked in issues [#6 to #17](https://github.com/flodufour/INTELLIWARE/milestone/1). The GitHub board, milestones and labels are set up.
 
-### Sprint 1 - Foundations (Nov 17 - Nov 27)
+### Sprint 1 - Robot first (Nov 17 - Nov 27)
+
+Last two weeks with the robot before January: robot tasks come first.
 
 | Member | Tasks |
 |--------|-------|
-| Florian | Orion-LD and MongoDB running, data model loaded. PIPER under ROS 2 with leader-follower teleoperation |
-| Adrien | BOM ingested in Neo4j as a graph. Document ingestion pipeline started |
-| Antoine | Shelf built, parts printed. First French maintenance procedures. RAG test question set v1 (FR and EN) |
-| Louis-Marie | Agent with mock tools (local Ollama until an API key is available). Streamlit chat |
+| Florian | PIPER under ROS 2 with leader-follower teleoperation. Recording pipeline in LeRobot format. Scripted pick from one slot. Data model loaded in Orion-LD |
+| Adrien | BOM ingested in Neo4j as a graph. Twin and knowledge base MCP servers started |
+| Antoine | Provisional shelf and first printed parts. Images and videos of the shelf and parts for vision. Data formats of the BOM and procedures |
+| Louis-Marie | Check that LeRobot drives the PIPER. Agent with mock tools (local Ollama until an API key is available). Streamlit chat |
+| All | 10 to 20 demonstrations on one slot, uploaded to Hugging Face Hub |
 
-Demo: chat answers from mocks; robot moved by teleoperation.
+Demo: robot teleoperated, demonstrations recorded, scripted pick from one slot; chat answers from mocks.
 
-### Sprint 2 - Walking skeleton (Nov 30 - Dec 11)
+### Sprint 2 - Software (Dec 21 - Jan 1)
 
-| Member | Tasks |
-|--------|-------|
-| Florian | Simulator v1 (sensors). Scripted pick from one slot. Recording pipeline in LeRobot format, 10 demonstrations on one slot |
-| Adrien | Twin and knowledge base MCP servers. Vector index on documents |
-| Antoine | Vision v1: part presence per slot. Safety and confirmation rules written |
-| Louis-Marie | Robot MCP server on the scripted move. Confirmation flow. Agent wired to the real twin and knowledge base. Short training on the 10 demonstrations, run on the robot |
-
-Demo: **first end-to-end chain**. A request in the chat moves the robot and updates the twin. **Robot pipeline check**: record, train and run a learned gesture on one slot, so problems show up before January.
-
-### Sprint 3 - Data collection (Dec 14 - Dec 18)
+Holidays, remote, no robot.
 
 | Member | Tasks |
 |--------|-------|
-| Florian | Recording sessions and dataset quality checks |
-| Louis-Marie | First SmolVLA training run on a small dataset, to validate the pipeline |
-| All | Record demonstrations: every slot, store and retrieve, including drops and recoveries |
+| Florian | Simulator: sensors and alerts, stock thresholds, purchase orders, deliveries. Robot controller HTTP API (robot-command contract), arm calls stubbed |
+| Adrien | Twin and knowledge base MCP servers on Orion-LD and Neo4j. Document ingestion and vector index |
+| Antoine | Vision v1 on the recorded images: part presence per slot. French maintenance procedures. RAG test question set v1 (FR and EN). Safety and confirmation rules |
+| Louis-Marie | Robot MCP server on the robot-command mock. Confirmation flow in the interface. Agent wired to the real twin and knowledge base. Short SmolVLA training on the November demonstrations, to validate the training pipeline |
 
-Holidays (Dec 21 - Jan 1): no planned work. Long training runs can run unattended.
+Demo (Jan 4): **software walking skeleton**. A request in the chat goes through the real twin and knowledge base, runs a task on the robot mock and updates the twin.
 
-### Sprint 4 - Intelligence (Jan 4 - Jan 15)
+### Sprint 3 - Walking skeleton and data (Jan 4 - Jan 15)
 
 | Member | Tasks |
 |--------|-------|
-| Florian | Simulator v2: stock thresholds, purchase orders, deliveries, sensor alerts. Twin updated by robot actions |
+| Florian | Robot controller on the real arm: scripted move, then the model of sprint 2. Recording sessions and dataset quality checks |
 | Adrien | Automated RAG evaluation in CI. Bilingual retrieval tuning. Live shelf view in the interface |
-| Antoine | Vision v2: grasp state (in gripper, dropped). Inventory scan compared to the twin |
+| Antoine | Final shelf built. Vision on the real shelf. Vision v2: grasp state (in gripper, dropped) |
 | Louis-Marie | SmolVLA LoRA fine-tuning on the full dataset. Bench evaluation |
-| All | Complete the dataset where the model fails |
+| All | First week: record demonstrations on every slot, store and retrieve, including drops and recoveries |
 
-Demo: robot executes trained gestures on the bench; inventory scan detects a moved part.
+Demo: **first end-to-end chain on the real robot**. A request in the chat moves the robot and updates the twin. Trained gestures run on the bench.
 
-### Sprint 5 - Integration (Jan 18 - Jan 29)
+### Sprint 4 - Integration (Jan 18 - Jan 29)
 
 | Member | Tasks |
 |--------|-------|
 | Florian | VLA integrated in the robot controller. Store and retrieve end to end |
-| Adrien | Replenish scenario end to end. Docker Compose split per machine |
-| Antoine | Failure handling end to end: retry after drop, missing part reported |
-| Louis-Marie | Agent handles all scenarios in French and English |
+| Adrien | Replenish and Monitor end to end. Docker Compose on two machines |
+| Antoine | Failure handling end to end: retry after drop, missing part reported. Inventory scan compared to the twin |
+| Louis-Marie | SmolVLA retrained where it fails. ACT fallback trained. Agent handles all scenarios in French and English |
+| All | Complete the dataset where the model fails |
 
-**Go/no-go on Jan 29**: if the VLA success rate is far below 80%, switch to ACT or to scripted grasp guided by the detector. Both fallbacks must be ready by then. Either way, the VLA is evaluated and reported (proposal 7).
+Both fallbacks (ACT, scripted grasp guided by the detector) are ready by Jan 29.
 
-### Sprint 6 - Robustness (Feb 1 - Feb 12)
+### Sprint 5 - Robustness (Feb 1 - Feb 12)
+
+**Go/no-go on Feb 5**: if the VLA success rate is far below 80%, switch to ACT or to scripted grasp guided by the detector. Either way, the VLA is evaluated and reported (proposal 7).
 
 | Member | Tasks |
 |--------|-------|
@@ -109,7 +108,7 @@ Demo: robot executes trained gestures on the bench; inventory scan detects a mov
 
 **Feature freeze on Feb 12**: no new features after this date, only fixes.
 
-### Sprint 7 - Delivery (Feb 15 - Feb 26)
+### Sprint 6 - Delivery (Feb 15 - Feb 26)
 
 | Member | Tasks |
 |--------|-------|
