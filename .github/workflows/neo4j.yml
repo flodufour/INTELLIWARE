@@ -1,0 +1,39 @@
+name: Neo4j
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: neo4j-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  neo4j-vector:
+    name: neo4j-vector
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      COMPOSE_PROJECT_NAME: intelliware-ci
+      NEO4J_PASSWORD: intelliware-ci-only
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Start Neo4j and wait for readiness
+        run: docker compose up -d --wait --wait-timeout 240 neo4j
+      - name: Check vector indexing and retrieval
+        run: python scripts/check_neo4j.py
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs neo4j
+      - name: Remove CI containers and volumes
+        if: always()
+        run: docker compose down --volumes
