@@ -40,7 +40,39 @@ docker compose ps                                        # check services
 docker compose down                                      # stop
 ```
 
-Orion-LD answers on http://localhost:1026. Services are placeholders until implemented.
+Orion-LD answers on http://localhost:1026. Neo4j Browser is at
+http://localhost:7474 and Bolt at `bolt://localhost:7687`. Services are
+placeholders until implemented.
+
+### Neo4j
+
+Neo4j Community 5.26 LTS stores the knowledge graph and document vectors.
+Vector indexes are built in; no plugin or Enterprise license is needed.
+The `neo4j-data` volume persists the database when containers are recreated.
+`docker compose down` keeps it; `docker compose down --volumes` deletes the data.
+
+Local development credentials are `neo4j` / `intelliware-dev`. Copy
+[.env.example](.env.example) to `.env` to override the password before the
+first start. An existing volume keeps its credentials when `.env` changes.
+The published Neo4j ports accept connections only from this machine.
+
+```sh
+docker compose up -d --wait neo4j
+python scripts/check_neo4j.py
+```
+
+For a custom password, also set `NEO4J_PASSWORD` in the shell running the
+Python check (PowerShell: `$env:NEO4J_PASSWORD = 'your-password'`). It uses the
+HTTP Query API, creates a temporary 3-dimensional vector index, waits until
+it is online, checks the nearest neighbor and removes its test data. The
+`neo4j-vector` CI job runs the same check on every PR. These synthetic vectors
+only validate database support; the multilingual embedding model and the
+document index will be added with ingestion in sprint 2.
+
+Inside Compose, `mcp-knowledge-base` connects to `bolt://neo4j:7687` and starts
+after Neo4j is healthy. Orion-LD and MongoDB remain the live digital twin;
+Neo4j holds the BOM and documentation. Part keys (`propeller`, `cap`, `clip`)
+and `bomRef` must match the NGSI-LD contract when ingestion is implemented.
 
 ## Tracking
 
