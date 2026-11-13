@@ -92,8 +92,4 @@ over HTTP: valid moves, invalid commands, duplicate requests, failures and stops
 It needs neither robot hardware nor a GPU. The standalone MCP mocks keep their
 dependencies in their script headers and are run with `uv run` (see `contracts/mcp`).
 
-To finish issue #10, the repository admin must edit the active `main_ruleset`
-under Settings > Rules > Rulesets, enable "Require status checks to pass",
-and select `lint-and-test` after its first run. The workflow alone does not
-block merges; the code-owner review rule remains in place. Check this with
-a temporary failing test on a PR, then remove it before merging.
+`lint-and-test` is a required check: a PR cannot be merged while it fails.
