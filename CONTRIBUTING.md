@@ -69,3 +69,31 @@ List them in `.gitignore`.
 ## Third-party files
 
 The repository is under the MIT license. Files we did not write (datasets, manuals, CAD) keep their original license: store them in their own folder with their source and LICENSE file.
+
+## Checks
+
+Use Python 3.12, the same version as the service containers:
+
+```sh
+python -m venv .venv
+# Linux/macOS: source .venv/bin/activate
+# PowerShell: .\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements-dev.txt
+python -m ruff check .
+python -m pytest
+docker compose config --quiet
+docker compose -f docker-compose.robot.yml config --quiet
+```
+
+CI runs these checks on every PR and push to `main`, and installs all service
+packages from their `pyproject.toml` files. Tests live in `tests/` or in each
+service's `tests/` folder. The initial suite exercises the robot-command mock
+over HTTP: valid moves, invalid commands, duplicate requests, failures and stops.
+It needs neither robot hardware nor a GPU. The standalone MCP mocks keep their
+dependencies in their script headers and are run with `uv run` (see `contracts/mcp`).
+
+To finish issue #10, the repository admin must edit the active `main_ruleset`
+under Settings > Rules > Rulesets, enable "Require status checks to pass",
+and select `lint-and-test` after its first run. The workflow alone does not
+block merges; the code-owner review rule remains in place. Check this with
+a temporary failing test on a PR, then remove it before merging.
