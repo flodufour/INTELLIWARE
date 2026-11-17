@@ -1,0 +1,163 @@
+{
+  "units": "mm",
+  "frame": "X width, Y up, Z front",
+  "frame_size_mm": [
+    300,
+    280,
+    160
+  ],
+  "height_with_bins_mm": 300,
+  "components": [
+    {
+      "part": "Side_panel",
+      "position_mm": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "part": "Side_panel",
+      "position_mm": [
+        288,
+        0,
+        0
+      ]
+    },
+    {
+      "part": "Shelf_board",
+      "position_mm": [
+        12,
+        20,
+        0
+      ]
+    },
+    {
+      "part": "Shelf_board",
+      "position_mm": [
+        12,
+        268,
+        0
+      ]
+    },
+    {
+      "part": "Rear_brace",
+      "position_mm": [
+        12,
+        218,
+        0
+      ]
+    },
+    {
+      "part": "Bin",
+      "position_mm": [
+        20,
+        32,
+        20
+      ]
+    },
+    {
+      "part": "Bin",
+      "position_mm": [
+        160,
+        32,
+        20
+      ]
+    },
+    {
+      "part": "Bin",
+      "position_mm": [
+        20,
+        280,
+        20
+      ]
+    },
+    {
+      "part": "Bin",
+      "position_mm": [
+        160,
+        280,
+        20
+      ]
+    },
+    {
+      "part": "IO_tray",
+      "position_mm": [
+        80,
+        0,
+        210
+      ]
+    }
+  ],
+  "part_volumes_mm3": {
+    "Side_panel": 537600.0,
+    "Shelf_board": 529920.0,
+    "Rear_brace": 165600.0,
+    "Bin": 67068.0,
+    "IO_tray": 86748.00000000015
+  },
+  "solid_count": 10,
+  "geometry": "valid STEP round trips; no interpenetration",
+  "reach": {
+    "assumed_robot_base_mm": [
+      150,
+      0,
+      400
+    ],
+    "nominal_reach_mm": 626,
+    "reserve_mm": 50,
+    "poses": [
+      {
+        "component_index": 5,
+        "assumed_flange_mm": [
+          80.0,
+          208,
+          80.0
+        ],
+        "radius_mm": 388.03,
+        "within_576_mm": true
+      },
+      {
+        "component_index": 6,
+        "assumed_flange_mm": [
+          220.0,
+          208,
+          80.0
+        ],
+        "radius_mm": 388.03,
+        "within_576_mm": true
+      },
+      {
+        "component_index": 7,
+        "assumed_flange_mm": [
+          80.0,
+          456,
+          80.0
+        ],
+        "radius_mm": 561.46,
+        "within_576_mm": true
+      },
+      {
+        "component_index": 8,
+        "assumed_flange_mm": [
+          220.0,
+          456,
+          80.0
+        ],
+        "radius_mm": 561.46,
+        "within_576_mm": true
+      },
+      {
+        "component_index": 9,
+        "assumed_flange_mm": [
+          150.0,
+          176,
+          280.0
+        ],
+        "radius_mm": 213.02,
+        "within_576_mm": true
+      }
+    ],
+    "limitation": "Radial screen only. Recheck joint limits, lower-shelf access, cameras, stability and collisions on the real robot. Previous stepped-shelf IK results do not apply."
+  }
+}
