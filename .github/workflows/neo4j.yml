@@ -20,6 +20,7 @@ jobs:
     env:
       COMPOSE_PROJECT_NAME: intelliware-ci
       NEO4J_PASSWORD: intelliware-ci-only
+      NEO4J_TEST_URI: bolt://127.0.0.1:7687
     steps:
       - uses: actions/checkout@v6
         with:
@@ -29,8 +30,12 @@ jobs:
           python-version: "3.12"
       - name: Start Neo4j and wait for readiness
         run: docker compose up -d --wait --wait-timeout 240 neo4j
+      - name: Install knowledge-base package and test tools
+        run: python -m pip install -r requirements-dev.txt -e services/mcp-knowledge-base
       - name: Check vector indexing and retrieval
         run: python scripts/check_neo4j.py
+      - name: Check BOM import and idempotence
+        run: python -m pytest -m neo4j services/mcp-knowledge-base/tests
       - name: Show logs on failure
         if: failure()
         run: docker compose logs neo4j

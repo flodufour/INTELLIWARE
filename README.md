@@ -71,8 +71,12 @@ document index will be added with ingestion in sprint 2.
 
 Inside Compose, `mcp-knowledge-base` connects to `bolt://neo4j:7687` and starts
 after Neo4j is healthy. Orion-LD and MongoDB remain the live digital twin;
-Neo4j holds the BOM and documentation. Part keys (`propeller`, `cap`, `clip`)
-and `bomRef` must match the NGSI-LD contract when ingestion is implemented.
+Neo4j holds the BOM and documentation. Part keys and BOM references are shared
+with NGSI-LD; updating the twin's provisional seed data is tracked in issue #47.
+
+The [knowledge-base BOM importer](services/mcp-knowledge-base/README.md#import-the-mechanical-bom)
+loads the mechanical CSV as assembly-to-part relationships, preserving its
+part keys and BOM references. It can be re-run without creating duplicates.
 
 ## Tracking
 
