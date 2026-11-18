@@ -1,0 +1,231 @@
+{
+  "units": "mm",
+  "frame": "X width, Y up, Z front",
+  "frame_size_mm": [
+    300,
+    280,
+    160
+  ],
+  "height_with_bins_mm": 300,
+  "components": [
+    {
+      "part": "Side_panel",
+      "position_mm": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "part": "Side_panel",
+      "position_mm": [
+        288,
+        0,
+        0
+      ]
+    },
+    {
+      "part": "Shelf_board",
+      "position_mm": [
+        12,
+        20,
+        0
+      ]
+    },
+    {
+      "part": "Shelf_board",
+      "position_mm": [
+        12,
+        268,
+        0
+      ]
+    },
+    {
+      "part": "Rear_brace",
+      "position_mm": [
+        12,
+        218,
+        0
+      ]
+    },
+    {
+      "part": "Bin",
+      "position_mm": [
+        20,
+        32,
+        20
+      ]
+    },
+    {
+      "part": "Bin",
+      "position_mm": [
+        160,
+        32,
+        20
+      ]
+    },
+    {
+      "part": "Bin",
+      "position_mm": [
+        20,
+        280,
+        20
+      ]
+    },
+    {
+      "part": "Bin",
+      "position_mm": [
+        160,
+        280,
+        20
+      ]
+    },
+    {
+      "part": "IO_tray",
+      "position_mm": [
+        80,
+        0,
+        210
+      ]
+    }
+  ],
+  "part_volumes_mm3": {
+    "Side_panel": 537600.0,
+    "Shelf_board": 529920.0,
+    "Rear_brace": 165600.0,
+    "Bin": 67068.0,
+    "IO_tray": 86748.00000000015
+  },
+  "solid_count": 10,
+  "geometry": "valid STEP round trips; no interpenetration",
+  "reach": {
+    "assumed_robot_base_mm": [
+      150,
+      0,
+      400
+    ],
+    "nominal_reach_mm": 626,
+    "reserve_mm": 50,
+    "poses": [
+      {
+        "component_index": 5,
+        "assumed_flange_mm": [
+          80.0,
+          214,
+          80.0
+        ],
+        "radius_mm": 391.27,
+        "within_576_mm": true,
+        "slot_id": "A1"
+      },
+      {
+        "component_index": 6,
+        "assumed_flange_mm": [
+          220.0,
+          214,
+          80.0
+        ],
+        "radius_mm": 391.27,
+        "within_576_mm": true,
+        "slot_id": "A2"
+      },
+      {
+        "component_index": 7,
+        "assumed_flange_mm": [
+          80.0,
+          462,
+          80.0
+        ],
+        "radius_mm": 566.34,
+        "within_576_mm": true,
+        "slot_id": "B1"
+      },
+      {
+        "component_index": 8,
+        "assumed_flange_mm": [
+          220.0,
+          462,
+          80.0
+        ],
+        "radius_mm": 566.34,
+        "within_576_mm": true,
+        "slot_id": "B2"
+      },
+      {
+        "component_index": 9,
+        "assumed_flange_mm": [
+          150.0,
+          182,
+          280.0
+        ],
+        "radius_mm": 218.0,
+        "within_576_mm": true,
+        "slot_id": "IO"
+      }
+    ],
+    "limitation": "Radial screen only. Recheck joint limits, lower-shelf access, cameras, stability and collisions on the real robot. Previous stepped-shelf IK results do not apply.",
+    "assumed_part_height_mm": 18,
+    "flange_offset_above_bin_base_mm": 182,
+    "offset_breakdown": "3 mm floor + 9 mm half-part height + 20 mm lift + 150 mm tool offset"
+  },
+  "exports": {
+    "method": "STEP AP214 and part STL exported from the committed SolidWorks 2026 files in millimetres, source coordinates preserved. Assembly STL tessellated from the exported STEP union to remove coincident internal faces; assembly STEP retains all 10 components.",
+    "checks": {
+      "Side_panel": {
+        "solids": 1,
+        "dimensions_mm": [
+          12.0,
+          280.0,
+          160.0
+        ],
+        "stl_watertight": true
+      },
+      "Shelf_board": {
+        "solids": 1,
+        "dimensions_mm": [
+          276.0,
+          12.0,
+          160.0
+        ],
+        "stl_watertight": true
+      },
+      "Rear_brace": {
+        "solids": 1,
+        "dimensions_mm": [
+          276.0,
+          50.0,
+          12.0
+        ],
+        "stl_watertight": true
+      },
+      "Bin": {
+        "solids": 1,
+        "dimensions_mm": [
+          120.0,
+          20.0,
+          120.0
+        ],
+        "stl_watertight": true
+      },
+      "IO_tray": {
+        "solids": 1,
+        "dimensions_mm": [
+          140.0,
+          20.0,
+          140.0
+        ],
+        "stl_watertight": true
+      },
+      "Shelf_classic": {
+        "solids": 10,
+        "dimensions_mm": [
+          300.0,
+          300.0,
+          350.0
+        ],
+        "stl_watertight": true
+      }
+    }
+  },
+  "physical_validation": "Pending cardboard mock-up, printed part grip and camera checks on the real PIPER before 2026-11-27. Lower bins are obstructed from above by the upper board."
+}
