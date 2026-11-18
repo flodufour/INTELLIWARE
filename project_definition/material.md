@@ -19,9 +19,11 @@ Status: **Have**, **To confirm** (asked, no answer yet), **Missing** (nobody has
 
 | Item | Purpose | Source | Status | Notes |
 |------|---------|--------|--------|-------|
-| Inference laptop | ROS 2, vision and model next to the robot | Us | Have | Florian: RTX 3050 Laptop 4 GB, 16 GB RAM, driver 621.14, CUDA 13.5 |
+| Robot PC | Arm control: CAN, ROS 2, cameras, recording, robot controller | To confirm | To confirm | Dedicated Linux PC, no GPU, available after the exams (from Jan 4). Ubuntu 22.04, ROS 2 Humble. Virtual machines on Windows failed: no VT-x with Hyper-V active |
+| Inference laptop | Vision and VLA inference over the local network | Us | Have | Florian: RTX 3050 Laptop 4 GB, 16 GB RAM, driver 621.14, CUDA 13.5 |
+| Local network | Robot PC to inference laptop | Us | Missing | Ethernet cable or small switch |
 | Services PC | Docker services: FIWARE, Neo4j, agent, chat | Us | Have | Florian's laptop for now; any 16 GB RAM PC |
-| Training GPU, 12 GB+ VRAM | SmolVLA fine-tuning | Us, school or cloud | Missing | Issue #17. School has GPUs, access to be asked. Team GPUs: Adrien, Antoine, Louis-Marie to report (`nvidia-smi`) |
+| Training GPU, 12 GB+ VRAM | SmolVLA and ACT training | Supervisor or cloud | To confirm | Issue #17. Supervisor's GPU if available, otherwise a rented cloud GPU (a few tens of euros for the project) |
 
 ## Built by us
 
