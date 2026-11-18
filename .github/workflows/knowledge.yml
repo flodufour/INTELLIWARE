@@ -1,0 +1,42 @@
+name: Knowledge base
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: knowledge-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  knowledge-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      COMPOSE_PROJECT_NAME: intelliware-knowledge-ci
+      NEO4J_PASSWORD: intelliware-ci-only
+      NEO4J_TEST_URI: bolt://127.0.0.1:7687
+      MCP_KNOWLEDGE_BASE_TEST_URL: http://127.0.0.1:8002/mcp
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install tools, contracts and service
+        run: python -m pip install -r requirements-dev.txt -e contracts/mcp -e services/mcp-knowledge-base
+      - name: Start Neo4j and the MCP server
+        run: docker compose up -d --build --wait --wait-timeout 240 neo4j mcp-knowledge-base
+      - name: Verify MCP calls against the live graph and HTTP endpoint
+        run: python -m pytest -m knowledge services/mcp-knowledge-base/tests
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs neo4j mcp-knowledge-base
+      - name: Remove test containers and volumes
+        if: always()
+        run: docker compose down --volumes

@@ -4,6 +4,10 @@ MCP tools the agent uses, exposed by three servers: twin, knowledge base, robot.
 
 The agent knows these tools and nothing else. A mock of each server is in this folder; swapping a mock for the real server changes nothing in the agent.
 
+Real services install these shared models with `python -m pip install -e contracts/mcp`
+and import `intelliware_mcp_contracts.models`. The standalone mocks continue
+to use the same `models.py` source from their script directory.
+
 | Server | Service | Owner | Port | Mock |
 |--------|---------|-------|------|------|
 | Twin | `mcp-twin` | Adrien | 8001 | [mock_twin.py](mock_twin.py) |
@@ -75,6 +79,12 @@ PartInfo  {part, names: {en, fr}, assembly: str | null, subparts: [str], related
 ```
 
 `query` can be French or English; the multilingual embeddings match both. `assembly` is the parent in the BOM graph, `related_parts` the parts usually replaced together, `procedures` the ids of the procedures that involve the part.
+
+Each `storage` limit is a number or `null`. `null` means the condition is
+unknown, not unrestricted: the agent must report that the condition is not
+available, and must not invent a threshold for Monitor. The mechanical BOM
+does not provide storage limits. The existing mocks retain their numeric
+example values; real tools only return limits recorded in the knowledge base.
 
 ## Robot server
 
