@@ -2,7 +2,7 @@
 name = "mcp-twin"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["intelliware-mcp-contracts==0.1.0", "httpx2>=2.10,<3"]
 
 [build-system]
 requires = ["setuptools>=68"]
