@@ -4,6 +4,10 @@ MCP tools the agent uses, exposed by three servers: twin, knowledge base, robot.
 
 The agent knows these tools and nothing else. A mock of each server is in this folder; swapping a mock for the real server changes nothing in the agent.
 
+Real services install these shared models with `python -m pip install -e contracts/mcp`
+and import `intelliware_mcp_contracts.models`. The standalone mocks continue
+to use the same `models.py` source from their script directory.
+
 | Server | Service | Owner | Port | Mock |
 |--------|---------|-------|------|------|
 | Twin | `mcp-twin` | Adrien | 8001 | [mock_twin.py](mock_twin.py) |

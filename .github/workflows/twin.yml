@@ -1,0 +1,58 @@
+name: Twin
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: twin-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  twin-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      COMPOSE_PROJECT_NAME: intelliware-twin-ci
+      ORION_URL: http://127.0.0.1:1026
+      ORION_TEST_URL: http://127.0.0.1:1026
+      MCP_TWIN_TEST_URL: http://127.0.0.1:8001/mcp
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install tools and contracts
+        run: python -m pip install -r requirements-dev.txt -e contracts/mcp -e services/mcp-twin
+      - name: Start Orion-LD and the twin server
+        run: docker compose up -d --build mongo orion-ld mcp-twin
+      - name: Wait for Orion-LD and load the contract seed
+        run: |
+          python - <<'PY'
+          import time
+          import urllib.error
+          import urllib.request
+          for attempt in range(60):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:1026/version', timeout=2):
+                      break
+              except (OSError, urllib.error.URLError):
+                  time.sleep(1)
+          else:
+              raise SystemExit('Orion-LD did not become ready')
+          PY
+          python contracts/ngsi-ld/seed.py
+      - name: Verify MCP tools against the live twin
+        run: python -m pytest -m orion services/mcp-twin/tests
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs mongo orion-ld mcp-twin
+      - name: Remove test containers and volumes
+        if: always()
+        run: docker compose down --volumes

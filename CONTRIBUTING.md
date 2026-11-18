@@ -78,7 +78,7 @@ Use Python 3.12, the same version as the service containers:
 python -m venv .venv
 # Linux/macOS: source .venv/bin/activate
 # PowerShell: .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements-dev.txt
+python -m pip install -r requirements-dev.txt -e contracts/mcp
 python -m ruff check .
 python -m pytest
 docker compose config --quiet

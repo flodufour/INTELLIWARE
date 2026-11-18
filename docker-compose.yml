@@ -43,8 +43,18 @@ services:
     build: services/agent
     restart: unless-stopped
   mcp-twin:
-    build: services/mcp-twin
+    build:
+      context: .
+      dockerfile: services/mcp-twin/Dockerfile
     restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8001
+      ORION_URL: http://orion-ld:1026
+    ports:
+      - "127.0.0.1:8001:8001"
+    depends_on:
+      - orion-ld
   mcp-knowledge-base:
     build: services/mcp-knowledge-base
     restart: unless-stopped
