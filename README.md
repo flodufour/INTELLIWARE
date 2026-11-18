@@ -41,8 +41,10 @@ docker compose down                                      # stop
 ```
 
 Orion-LD answers on http://localhost:1026. Neo4j Browser is at
-http://localhost:7474 and Bolt at `bolt://localhost:7687`. Services are
-placeholders until implemented.
+http://localhost:7474 and Bolt at `bolt://localhost:7687`. The
+[knowledge-base MCP server](services/mcp-knowledge-base/README.md) exposes
+`get_part_info` at `http://127.0.0.1:8002/mcp`; other application services
+remain placeholders until implemented.
 
 ### Neo4j
 

@@ -80,6 +80,12 @@ PartInfo  {part, names: {en, fr}, assembly: str | null, subparts: [str], related
 
 `query` can be French or English; the multilingual embeddings match both. `assembly` is the parent in the BOM graph, `related_parts` the parts usually replaced together, `procedures` the ids of the procedures that involve the part.
 
+Each `storage` limit is a number or `null`. `null` means the condition is
+unknown, not unrestricted: the agent must report that the condition is not
+available, and must not invent a threshold for Monitor. The mechanical BOM
+does not provide storage limits. The existing mocks retain their numeric
+example values; real tools only return limits recorded in the knowledge base.
+
 ## Robot server
 
 Drives the arm through the [robot-command](../robot-command/) contract and vision. After every task and scan it writes the result to the twin (Task entity, slot contents).

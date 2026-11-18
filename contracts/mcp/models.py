@@ -8,7 +8,7 @@ import json
 from typing import Any, Literal
 
 from mcp.types import CallToolResult, TextContent
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 SLOT_PATTERN = r"^[A-Z][1-9]$"
 
@@ -153,9 +153,9 @@ class DocumentRef(BaseModel):
 
 
 class Storage(BaseModel):
-    temperature_min: float
-    temperature_max: float
-    humidity_max: float
+    temperature_min: float | None = Field(default=None, description="Recorded minimum in Celsius; null means unknown.")
+    temperature_max: float | None = Field(default=None, description="Recorded maximum in Celsius; null means unknown.")
+    humidity_max: float | None = Field(default=None, description="Recorded maximum relative humidity in percent; null means unknown.")
 
 
 class PartInfo(BaseModel):
