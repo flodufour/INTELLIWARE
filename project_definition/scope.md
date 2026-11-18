@@ -98,8 +98,9 @@ End-to-end tests run the scenarios on the full chain from the software walking s
 
 ## Compute
 
-- **Training**: one GPU with at least 12 GB VRAM (team, school or cloud). Team GPUs run separate experiments in parallel; one training split across PCs would be slower.
-- **Inference**: laptop GPU next to the robot (Florian: RTX 3050 Laptop, 4 GB, enough for the detector and probably SmolVLA). Jetson later if time allows.
+- **Robot control**: a dedicated Linux PC next to the arm, without GPU (Ubuntu 22.04, ROS 2 Humble): CAN, cameras, recording, robot controller.
+- **Inference**: Florian's laptop GPU (RTX 3050 Laptop, 4 GB) on the local network runs vision and the VLA policy (LeRobot remote inference). To check early: SmolVLA and the detector fit in 4 GB together. Jetson later if time allows.
+- **Training**: one GPU with at least 12 GB VRAM: the supervisor's GPU if available, otherwise a rented cloud GPU. Datasets come from Hugging Face Hub.
 
 ## Compliance with proposals 7 and 10
 
@@ -135,14 +136,15 @@ Everyone records robot demonstrations.
 
 ## Milestones
 
-Deadline: **March 1, 2027**, set by the team to finish before the end-of-year exams, with one to two weeks of margin. No project work during the exams (Nov 30 - Dec 18) and no robot access from Nov 28 to Jan 3. Sprints in [roadmap.md](roadmap.md).
+Deadline: **March 1, 2027**, set by the team to finish before the end-of-year exams, with one to two weeks of margin. No project work during the exams (Nov 30 - Dec 18), no robot access from Nov 28 to Jan 3, and no robot PC before Jan 4. Sprints in [roadmap.md](roadmap.md).
 
 | Date | Milestone | Done when |
 |------|-----------|-----------|
 | Nov 16, 2026 | Kickoff | Scope approved, contracts and mocks agreed, hardware confirmed |
-| Nov 27, 2026 | Robot pipeline check | Teleoperation, recording and scripted pick on one slot; demonstrations and shelf images recorded for remote work |
-| Jan 4, 2027 | Software walking skeleton | Chat to agent to real twin and knowledge base, task on the robot mock; simulator feeds the twin |
-| Jan 15, 2027 | Walking skeleton | Same chain on the real robot; demonstrations recorded on every slot, SmolVLA trained |
+| Nov 27, 2026 | Hardware check | Shelf and parts validated on the arm in native leader-follower mode; shelf images recorded for remote work |
+| Jan 4, 2027 | Software walking skeleton | Chat to agent to real twin and knowledge base, task on the robot mock; simulator feeds the twin; training pipeline validated on a public dataset |
+| Jan 15, 2027 | Walking skeleton | Same chain on the real robot with the scripted pick; demonstrations recorded on every slot |
+| Jan 29, 2027 | VLA trained | SmolVLA trained on our demonstrations and integrated; ACT fallback trained |
 | Feb 5, 2027 | VLA go/no-go | VLA kept for the demo, or replaced by a fallback; VLA results reported either way |
 | Feb 12, 2027 | Feature freeze | All scenarios end to end, robustness tests done |
 | Mar 1, 2027 | Delivery | Validation report, demo, defense |
@@ -163,16 +165,17 @@ Targets confirmed after the first tests.
 
 | Risk | Mitigation |
 |------|------------|
-| Four months is short for robot learning | Small shelf, robot pipeline checked on one slot by Nov 27, fallbacks ready by Jan 29, go/no-go on Feb 5 |
-| No robot access from Nov 28 to Jan 3 | Robot tasks first in sprint 1; demonstrations and shelf images recorded for remote work; software and first training during the holidays |
+| Four months is short for robot learning | Small shelf, scripted pick by Jan 15, fallbacks ready by Jan 29, go/no-go on Feb 5 |
+| No robot PC before Jan 4, one week between the first training on our data and the go/no-go | Shelf and parts validated in native leader-follower mode in November; training pipeline validated on a public dataset during the holidays; scripted pick first so the walking skeleton does not wait for the VLA |
+| SmolVLA and the detector do not fit together in 4 GB | Checked early; run them one after the other, or the detector on CPU |
 | Incomplete OpenROV data | Checked in sprint 0; complete it ourselves or switch product |
 | Slots out of reach | Shelf designed around the PIPER workspace, open-top bins |
 | PIPER not supported by LeRobot | Checked in sprint 0; adapter on top of the ROS 2 driver |
-| No 12 GB GPU | School or cloud GPU |
+| No 12 GB GPU | Supervisor's GPU, otherwise cloud GPU |
 | Late or broken integration | Contracts in sprint 0, software walking skeleton Jan 4, real one Jan 15, end-to-end tests after |
 
 ## Open questions
 
 - LLM: API keys from the school, or local Ollama.
-- Training GPU: access to school GPUs, or GPUs of Adrien, Antoine and Louis-Marie (`nvidia-smi`). Remaining hardware in [material.md](material.md).
+- Training GPU: the supervisor's GPU, otherwise a cloud provider and its budget. Remaining hardware in [material.md](material.md).
 - Which vehicle parts go on the shelf.
